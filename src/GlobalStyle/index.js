@@ -15,11 +15,11 @@ const GlobalStyle = createGlobalStyle`
     }
 
     ul
-{
-list-style: none;
-padding: 0;
-margin: 0;
-}
+        {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
     html, body {
         display: flex;
@@ -30,6 +30,7 @@ margin: 0;
         flex: 1;
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
     }
 `;
 
