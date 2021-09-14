@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import breakpointsMedia from '../../theme/utils/breakpointsMedia';
+import cssInline from '../../theme/utils/cssInline';
 
 const Container = styled.div`
     padding-left: 28px;
@@ -23,7 +24,7 @@ const Container = styled.div`
             max-width: 1222px;
         `,
   })};
-  
+   ${cssInline}
 `;
 
 const Row = styled.div`
@@ -31,7 +32,7 @@ const Row = styled.div`
     flex-wrap: wrap;
     margin-right: -16px;
     margin-left: -16px;
-    
+    ${cssInline}
 `;
 
 const Col = styled.div`
@@ -75,7 +76,7 @@ const Col = styled.div`
                 `,
     }));
   }};
-
+   ${cssInline}
     
 `;
 
