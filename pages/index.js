@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Footer from '../src/commons/Footer';
 import Header from '../src/commons/Header';
 
 const ContainerWrapper = styled.div`
@@ -21,6 +22,7 @@ export default function Home() {
     <>
       <Header />
       <Container />
+      <Footer />
     </>
   );
 }
