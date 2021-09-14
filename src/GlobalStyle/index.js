@@ -14,6 +14,10 @@ const GlobalStyle = createGlobalStyle`
         font-family: 'Lily Script One', cursive;
     }
 
+    img {
+        max-width: 100%;
+    }
+
     ul
         {
             list-style: none;
