@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-no-bind */
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import Link from 'next/link';
@@ -91,8 +93,6 @@ function Container() {
                 grant_type: 'password',
               };
 
-              console.log('userDTO', userDTO);
-
               fetch('https://don-delivery.herokuapp.com/oauth/token', {
                 method: 'POST',
                 headers: {
@@ -102,7 +102,6 @@ function Container() {
               })
                 .then((respostaDoServidor) => {
                   if (respostaDoServidor.ok) {
-                    console.log(respostaDoServidor);
                     return respostaDoServidor.json();
                   }
 
