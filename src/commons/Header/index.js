@@ -1,23 +1,41 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Link from 'next/link';
 import Grid from '../Grid';
+import breakpointsMedia from '../../theme/utils/breakpointsMedia';
 
 const HeaderWrapper = styled.header`
   background-color: #FFB564;
   align-items: center;
   padding: 8px 16px;
-  font-size: 16px;  
+  font-size: 16px;
+  img {
+    ${breakpointsMedia({
+    xs: css`
+              max-height: 30px;
+          `,
+    sm: css`
+              max-height: 60px;
+          `,
+  })};
+  }
 `;
 
 const HeaderLeft = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: center;
-  font-size: 32px;
+  align-items: center;  
   p {
-    margin-left:16px;
+    margin: 0 0 0 16px ;
   }
+  ${breakpointsMedia({
+    sm: css`
+            font-size: 16px;
+        `,
+    md: css`
+            font-size: 32px;
+        `,
+  })};
 `;
 
 const HeaderRight = styled.div`
