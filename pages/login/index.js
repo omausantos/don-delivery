@@ -22,7 +22,7 @@ const Form = styled.form`
     font-size: 34px;
     text-align: center;
   }
-  a {
+  > a {
     text-decoration: none;
     color: #000;
     padding-bottom: 16px;
@@ -85,7 +85,9 @@ function Container() {
               <Button
                 color="#FFB563"
               >
-                Cadastra-se
+                <Link href="/cadastro" passHref>
+                  <a href="/cadastro">Cadastra-se</a>
+                </Link>
               </Button>
             </Form>
 

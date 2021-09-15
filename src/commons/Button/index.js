@@ -13,6 +13,10 @@ const ElementButton = styled.button`
   margin: 16px auto;  
   cursor: pointer;
   background-color: ${({ color }) => color};
+  a {
+    color: #000;
+    text-decoration: none;
+  }
 `;
 
 // eslint-disable-next-line react/prop-types
