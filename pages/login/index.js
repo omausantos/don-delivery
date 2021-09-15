@@ -31,7 +31,31 @@ const Form = styled.form`
   padding-bottom: 16px;
 `;
 
+const formStates = {
+  DEFAULT: 'DEFAULT',
+  LOADING: 'LOADING',
+  DONE: 'DONE',
+  ERROR: 'ERROR',
+};
+
 function Container() {
+  const [userInfo, setUserInfo] = React.useState({
+    email: 'alex@gmail.com',
+    password: '123456',
+  });
+  const [isFormSubmited, setIsFormSubmited] = React.useState(false);
+  const [submissionStatus, setSubmissionStatus] = React.useState(formStates.DEFAULT);
+
+  function handleChange(event) {
+    const fieldName = event.target.getAttribute('name');
+    setUserInfo({
+      ...userInfo,
+      [fieldName]: event.target.value,
+    });
+  }
+
+  const isFormInvalid = userInfo.email.length === 0 || userInfo.password.length === 0;
+
   return (
     <>
       <Grid.Container>
@@ -59,6 +83,37 @@ function Container() {
 
             <Form onSubmit={(event) => {
               event.preventDefault();
+              setIsFormSubmited(true);
+
+              const userDTO = {
+                username: userInfo.email,
+                password: userInfo.password,
+                grant_type: 'password',
+              };
+
+              console.log('userDTO', userDTO);
+
+              fetch('https://don-delivery.herokuapp.com/oauth/token', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: JSON.stringify(userDTO),
+              })
+                .then((respostaDoServidor) => {
+                  if (respostaDoServidor.ok) {
+                    console.log(respostaDoServidor);
+                    return respostaDoServidor.json();
+                  }
+
+                  throw new Error('Não foi possível cadastrar o usuário agora');
+                })
+                .then(() => {
+                  setSubmissionStatus(formStates.DONE);
+                })
+                .catch(() => {
+                  setSubmissionStatus(formStates.ERROR);
+                });
             }}
             >
               <h1>
@@ -69,12 +124,19 @@ function Container() {
               </Label>
               <TextInput
                 icone="/images/login/email.jpg"
+                name="email"
+                value={userInfo.email}
+                onChange={handleChange}
               />
               <Label>
                 Senha
               </Label>
               <TextInput
                 icone="/images/login/password.jpg"
+                name="password"
+                type="password"
+                value={userInfo.password}
+                onChange={handleChange}
               />
               <Link href="/login" passHref>
                 <a href="/login">Esqueceu sua senha?</a>

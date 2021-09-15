@@ -16,11 +16,12 @@ const Input = styled.input`
 `;
 
 // eslint-disable-next-line react/prop-types
-export default function TextInput({ icone }) {
+export default function TextInput({ icone, ...props }) {
   return (
     <>
       <Input
         icone={icone}
+        {...props}
       />
     </>
   );
