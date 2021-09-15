@@ -1,6 +1,7 @@
 /* eslint-disable react/button-has-type */
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
+import Link from 'next/link';
 import Footer from '../src/commons/Footer';
 import Grid from '../src/commons/Grid';
 import Header from '../src/commons/Header';
@@ -28,9 +29,8 @@ const ContainerWrapper = styled.div`
     font-size: 24px;
     line-height: 32px;
   }
-  button {
+  a {
     width: 214.77px;
-    height: 57px;
     background: #FFB563;
     box-shadow: 0px 4.07143px 4.07143px rgba(0, 0, 0, 0.25), 0px 4.07143px 4.07143px rgba(0, 0, 0, 0.25);
     border-radius: 8px;
@@ -40,6 +40,9 @@ const ContainerWrapper = styled.div`
     cursor: pointer;
     margin: 0 auto;
     text-shadow: 1px 1px black;
+    text-decoration: none;
+    text-align: center;
+    padding: 8px 0;
   }
 `;
 
@@ -69,7 +72,9 @@ function Container() {
               entregamos até você!
             </h1>
             <p>Escolha o seu pedido e em poucos minutos o entregaremos na porta da sua casa.</p>
-            <button>Fazer pedido</button>
+            <Link href="/login" passHref>
+              <a href="/login">Fazer pedido</a>
+            </Link>
           </Grid.Col>
           <Grid.Col
             offset={{ xs: 0, md: 1 }}
