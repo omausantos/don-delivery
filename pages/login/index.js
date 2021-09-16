@@ -1,8 +1,10 @@
+/* eslint-disable no-console */
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import Link from 'next/link';
+import axios from 'axios';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
@@ -58,6 +60,27 @@ function Container() {
 
   const isFormInvalid = userInfo.email.length === 0 || userInfo.password.length === 0;
 
+  useEffect(() => {
+    const api = axios.create({
+      baseURL: 'https://don-delivery.herokuapp.com',
+    });
+    const data = {
+      username: 'alex@gmail.com',
+      password: '123456',
+      grant_type: 'password',
+    };
+    api
+      .post('/oauth/token', data, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': '73', Authorization: 'Basic ZG9uLWRlbGl2ZXJ5OmRvbi1kZWxpdmVyeTEyMw==', Host: 'don-delivery.herokuapp.com',
+        },
+      })
+      .then((response) => console.log(response.data))
+      .catch((err) => {
+        console.error(`ops! ocorreu um erro${err}`);
+      });
+  }, []);
+
   return (
     <>
       <Grid.Container>
@@ -93,26 +116,35 @@ function Container() {
                 grant_type: 'password',
               };
 
-              fetch('https://don-delivery.herokuapp.com/oauth/token', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: JSON.stringify(userDTO),
-              })
-                .then((respostaDoServidor) => {
-                  if (respostaDoServidor.ok) {
-                    return respostaDoServidor.json();
-                  }
+              // fetch('https://don-delivery.herokuapp.com/products', {
+              //   method: 'GET',
+              // })
+              //   .then(async (respostaDoServer) => {
+              //     const dadosDaResposta = await respostaDoServer.json();
+              //     const { token } = dadosDaResposta;
+              //   });
 
-                  throw new Error('Não foi possível cadastrar o usuário agora');
-                })
-                .then(() => {
-                  setSubmissionStatus(formStates.DONE);
-                })
-                .catch(() => {
-                  setSubmissionStatus(formStates.ERROR);
-                });
+              // fetch('https://alurakut.vercel.app/api/login', {
+              //   method: 'POST',
+              //   headers: {
+              //     'Content-Type': 'application/x-www-form-urlencoded',
+              //     Authorization: 'Basic ZG9uLWRlbGl2ZXJ5OmRvbi1kZWxpdmVyeTEyM2U=',
+              //   },
+              //   body: JSON.stringify(userDTO),
+              // })
+              //   .then((respostaDoServidor) => {
+              //     if (respostaDoServidor.ok) {
+              //       return respostaDoServidor.json();
+              //     }
+
+              //     throw new Error('Não foi possível cadastrar o usuário agora');
+              //   })
+              //   .then(() => {
+              //     setSubmissionStatus(formStates.DONE);
+              //   })
+              //   .catch(() => {
+              //     setSubmissionStatus(formStates.ERROR);
+              //   });
             }}
             >
               <h1>
