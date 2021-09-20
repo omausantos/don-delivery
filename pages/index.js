@@ -48,43 +48,45 @@ const ContainerWrapper = styled.div`
 
 function Container() {
   return (
-    <ContainerWrapper>
-      <Grid.Container>
-        <Grid.Row
-          cssinline={{
-            margin: {
-              xs: '18px 0',
-              md: '0',
-            },
-          }}
-        >
-          <Grid.Col
-            offset={{ xs: 0, md: 1 }}
-            col={{ xs: 12, md: 4 }}
+    <>
+      <ContainerWrapper>
+        <Grid.Container>
+          <Grid.Row
             cssinline={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
+              margin: {
+                xs: '18px 0',
+                md: '0',
+              },
             }}
           >
-            <h1>
-              Faça seu pedido que
-              entregamos até você!
-            </h1>
-            <p>Escolha o seu pedido e em poucos minutos o entregaremos na porta da sua casa.</p>
-            <Link href="/login" passHref>
-              <a href="/login">Fazer pedido</a>
-            </Link>
-          </Grid.Col>
-          <Grid.Col
-            offset={{ xs: 0, md: 1 }}
-            col={{ xs: 12, md: 6 }}
-          >
-            <img src="/images/home/entrega.png" alt="Realizando entrega em domicilio" />
-          </Grid.Col>
-        </Grid.Row>
-      </Grid.Container>
-    </ContainerWrapper>
+            <Grid.Col
+              offset={{ xs: 0, md: 1 }}
+              col={{ xs: 12, md: 4 }}
+              cssinline={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+              }}
+            >
+              <h1>
+                Faça seu pedido que
+                entregamos até você!
+              </h1>
+              <p>Escolha o seu pedido e em poucos minutos o entregaremos na porta da sua casa.</p>
+              <Link href="/login" passHref>
+                <a href="/login">Fazer pedido</a>
+              </Link>
+            </Grid.Col>
+            <Grid.Col
+              offset={{ xs: 0, md: 1 }}
+              col={{ xs: 12, md: 6 }}
+            >
+              <img src="/images/home/entrega.png" alt="Realizando entrega em domicilio" />
+            </Grid.Col>
+          </Grid.Row>
+        </Grid.Container>
+      </ContainerWrapper>
+    </>
   );
 }
 
