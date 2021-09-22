@@ -35,20 +35,11 @@ const Form = styled.form`
   padding-bottom: 16px;
 `;
 
-const formStates = {
-  DEFAULT: 'DEFAULT',
-  LOADING: 'LOADING',
-  DONE: 'DONE',
-  ERROR: 'ERROR',
-};
-
 function Container() {
   const [userInfo, setUserInfo] = React.useState({
-    email: 'alex@gmail.com',
-    password: '123456',
+    email: '',
+    password: '',
   });
-  const [isFormSubmited, setIsFormSubmited] = React.useState(false);
-  const [submissionStatus, setSubmissionStatus] = React.useState(formStates.DEFAULT);
 
   function handleChange(event) {
     const fieldName = event.target.getAttribute('name');
@@ -57,29 +48,6 @@ function Container() {
       [fieldName]: event.target.value,
     });
   }
-
-  const isFormInvalid = userInfo.email.length === 0 || userInfo.password.length === 0;
-
-  useEffect(() => {
-    const api = axios.create({
-      baseURL: 'https://don-delivery.herokuapp.com',
-    });
-    const data = {
-      username: 'alex@gmail.com',
-      password: '123456',
-      grant_type: 'password',
-    };
-    api
-      .post('/oauth/token', data, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': '73', Authorization: 'Basic ZG9uLWRlbGl2ZXJ5OmRvbi1kZWxpdmVyeTEyMw==', Host: 'don-delivery.herokuapp.com',
-        },
-      })
-      .then((response) => console.log(response.data))
-      .catch((err) => {
-        console.error(`ops! ocorreu um erro${err}`);
-      });
-  }, []);
 
   return (
     <>
@@ -108,43 +76,12 @@ function Container() {
 
             <Form onSubmit={(event) => {
               event.preventDefault();
-              setIsFormSubmited(true);
 
               const userDTO = {
                 username: userInfo.email,
                 password: userInfo.password,
                 grant_type: 'password',
               };
-
-              // fetch('https://don-delivery.herokuapp.com/products', {
-              //   method: 'GET',
-              // })
-              //   .then(async (respostaDoServer) => {
-              //     const dadosDaResposta = await respostaDoServer.json();
-              //     const { token } = dadosDaResposta;
-              //   });
-
-              // fetch('https://alurakut.vercel.app/api/login', {
-              //   method: 'POST',
-              //   headers: {
-              //     'Content-Type': 'application/x-www-form-urlencoded',
-              //     Authorization: 'Basic ZG9uLWRlbGl2ZXJ5OmRvbi1kZWxpdmVyeTEyM2U=',
-              //   },
-              //   body: JSON.stringify(userDTO),
-              // })
-              //   .then((respostaDoServidor) => {
-              //     if (respostaDoServidor.ok) {
-              //       return respostaDoServidor.json();
-              //     }
-
-              //     throw new Error('Não foi possível cadastrar o usuário agora');
-              //   })
-              //   .then(() => {
-              //     setSubmissionStatus(formStates.DONE);
-              //   })
-              //   .catch(() => {
-              //     setSubmissionStatus(formStates.ERROR);
-              //   });
             }}
             >
               <h1>
