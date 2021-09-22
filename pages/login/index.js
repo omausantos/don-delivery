@@ -29,26 +29,42 @@ const Form = styled.form`
   > a {
     text-decoration: none;
     color: #000;
-    padding-bottom: 16px;
+    padding: 8px;
     display: block;
   }
   padding-bottom: 16px;
 `;
 
-const formStates = {
-  DEFAULT: 'DEFAULT',
-  LOADING: 'LOADING',
-  DONE: 'DONE',
-  ERROR: 'ERROR',
-};
+const MensagemErro = styled.div`
+  color: red;
+  padding-left: 8px;
+  padding-top: 4px;
+`;
+const MensagemOk = styled(MensagemErro)`
+  color: green;
+`;
+
+function validacoes(values) {
+  const errors = {};
+
+  if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+    errors.email = 'Ops, insira um email válido';
+  }
+
+  if (values.senha.length < 5) {
+    errors.senha = 'Mínimo de 5 digitos';
+  }
+
+  return errors;
+}
 
 function Container() {
   const [userInfo, setUserInfo] = React.useState({
-    email: 'alex@gmail.com',
-    password: '123456',
+    email: '',
+    senha: '',
   });
-  const [isFormSubmited, setIsFormSubmited] = React.useState(false);
-  const [submissionStatus, setSubmissionStatus] = React.useState(formStates.DEFAULT);
+
+  const [errors, setErrors] = React.useState([]);
 
   function handleChange(event) {
     const fieldName = event.target.getAttribute('name');
@@ -57,29 +73,6 @@ function Container() {
       [fieldName]: event.target.value,
     });
   }
-
-  const isFormInvalid = userInfo.email.length === 0 || userInfo.password.length === 0;
-
-  useEffect(() => {
-    const api = axios.create({
-      baseURL: 'https://don-delivery.herokuapp.com',
-    });
-    const data = {
-      username: 'alex@gmail.com',
-      password: '123456',
-      grant_type: 'password',
-    };
-    api
-      .post('/oauth/token', data, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': '73', Authorization: 'Basic ZG9uLWRlbGl2ZXJ5OmRvbi1kZWxpdmVyeTEyMw==', Host: 'don-delivery.herokuapp.com',
-        },
-      })
-      .then((response) => console.log(response.data))
-      .catch((err) => {
-        console.error(`ops! ocorreu um erro${err}`);
-      });
-  }, []);
 
   return (
     <>
@@ -108,48 +101,30 @@ function Container() {
 
             <Form onSubmit={(event) => {
               event.preventDefault();
-              setIsFormSubmited(true);
 
               const userDTO = {
-                username: userInfo.email,
-                password: userInfo.password,
+                email: userInfo.email,
+                senha: userInfo.senha,
                 grant_type: 'password',
               };
 
-              // fetch('https://don-delivery.herokuapp.com/products', {
-              //   method: 'GET',
-              // })
-              //   .then(async (respostaDoServer) => {
-              //     const dadosDaResposta = await respostaDoServer.json();
-              //     const { token } = dadosDaResposta;
-              //   });
+              const validacoesCampos = validacoes(userDTO);
+              setErrors(validacoesCampos);
 
-              // fetch('https://alurakut.vercel.app/api/login', {
-              //   method: 'POST',
-              //   headers: {
-              //     'Content-Type': 'application/x-www-form-urlencoded',
-              //     Authorization: 'Basic ZG9uLWRlbGl2ZXJ5OmRvbi1kZWxpdmVyeTEyM2U=',
-              //   },
-              //   body: JSON.stringify(userDTO),
-              // })
-              //   .then((respostaDoServidor) => {
-              //     if (respostaDoServidor.ok) {
-              //       return respostaDoServidor.json();
-              //     }
-
-              //     throw new Error('Não foi possível cadastrar o usuário agora');
-              //   })
-              //   .then(() => {
-              //     setSubmissionStatus(formStates.DONE);
-              //   })
-              //   .catch(() => {
-              //     setSubmissionStatus(formStates.ERROR);
-              //   });
+              if (Object.keys(validacoesCampos).length === 0) {
+                if (userDTO.email === 'pizza@pizza.com' && userDTO.senha === 'pizza') {
+                  setErrors({ acessoliberado: 'Acesso Efetuado' });
+                } else {
+                  setErrors({ acessonegado: 'Dados de Acesso inválidos' });
+                }
+              }
             }}
             >
               <h1>
                 Bem-vindo!
               </h1>
+              {errors.acessonegado && <MensagemErro>{errors.acessonegado}</MensagemErro>}
+              {errors.acessoliberado && <MensagemOk>{errors.acessoliberado}</MensagemOk>}
               <Label>
                 E-mail
               </Label>
@@ -159,16 +134,20 @@ function Container() {
                 value={userInfo.email}
                 onChange={handleChange}
               />
+              {errors.email && <MensagemErro>{errors.email}</MensagemErro>}
+
               <Label>
                 Senha
               </Label>
               <TextInput
                 icone="/images/login/password.jpg"
-                name="password"
+                name="senha"
                 type="password"
-                value={userInfo.password}
+                value={userInfo.senha}
                 onChange={handleChange}
               />
+              {errors.senha && <MensagemErro>{errors.senha}</MensagemErro>}
+
               <Link href="/login" passHref>
                 <a href="/login">Esqueceu sua senha?</a>
               </Link>
