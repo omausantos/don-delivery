@@ -10,7 +10,6 @@ const Input = styled.input`
   border: none;
   padding: 16px 8px;
   border-radius: 16px;
-  margin-bottom: 16px;
   background-image: url(${({ icone }) => icone});
   width: 100%;
 `;

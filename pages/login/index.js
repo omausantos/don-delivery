@@ -29,17 +29,42 @@ const Form = styled.form`
   > a {
     text-decoration: none;
     color: #000;
-    padding-bottom: 16px;
+    padding: 8px;
     display: block;
   }
   padding-bottom: 16px;
 `;
 
+const MensagemErro = styled.div`
+  color: red;
+  padding-left: 8px;
+  padding-top: 4px;
+`;
+const MensagemOk = styled(MensagemErro)`
+  color: green;
+`;
+
+function validacoes(values) {
+  const errors = {};
+
+  if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+    errors.email = 'Ops, insira um email válido';
+  }
+
+  if (values.senha.length < 5) {
+    errors.senha = 'Mínimo de 5 digitos';
+  }
+
+  return errors;
+}
+
 function Container() {
   const [userInfo, setUserInfo] = React.useState({
     email: '',
-    password: '',
+    senha: '',
   });
+
+  const [errors, setErrors] = React.useState([]);
 
   function handleChange(event) {
     const fieldName = event.target.getAttribute('name');
@@ -78,15 +103,28 @@ function Container() {
               event.preventDefault();
 
               const userDTO = {
-                username: userInfo.email,
-                password: userInfo.password,
+                email: userInfo.email,
+                senha: userInfo.senha,
                 grant_type: 'password',
               };
+
+              const validacoesCampos = validacoes(userDTO);
+              setErrors(validacoesCampos);
+
+              if (Object.keys(validacoesCampos).length === 0) {
+                if (userDTO.email === 'pizza@pizza.com' && userDTO.senha === 'pizza') {
+                  setErrors({ acessoliberado: 'Acesso Efetuado' });
+                } else {
+                  setErrors({ acessonegado: 'Dados de Acesso inválidos' });
+                }
+              }
             }}
             >
               <h1>
                 Bem-vindo!
               </h1>
+              {errors.acessonegado && <MensagemErro>{errors.acessonegado}</MensagemErro>}
+              {errors.acessoliberado && <MensagemOk>{errors.acessoliberado}</MensagemOk>}
               <Label>
                 E-mail
               </Label>
@@ -96,16 +134,20 @@ function Container() {
                 value={userInfo.email}
                 onChange={handleChange}
               />
+              {errors.email && <MensagemErro>{errors.email}</MensagemErro>}
+
               <Label>
                 Senha
               </Label>
               <TextInput
                 icone="/images/login/password.jpg"
-                name="password"
+                name="senha"
                 type="password"
-                value={userInfo.password}
+                value={userInfo.senha}
                 onChange={handleChange}
               />
+              {errors.senha && <MensagemErro>{errors.senha}</MensagemErro>}
+
               <Link href="/login" passHref>
                 <a href="/login">Esqueceu sua senha?</a>
               </Link>
