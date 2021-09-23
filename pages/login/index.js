@@ -1,16 +1,17 @@
 /* eslint-disable no-console */
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import Link from 'next/link';
-import axios from 'axios';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
 import TextInput from '../../src/commons/TextField';
 import Label from '../../src/commons/Label';
 import Button from '../../src/commons/Button';
+import validacoes from '../../src/commons/Validations';
+import { MensagemErro, MensagemOk } from '../../src/commons/MessageInput';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -35,33 +36,10 @@ const Form = styled.form`
   padding-bottom: 16px;
 `;
 
-const MensagemErro = styled.div`
-  color: red;
-  padding-left: 8px;
-  padding-top: 4px;
-`;
-const MensagemOk = styled(MensagemErro)`
-  color: green;
-`;
-
-function validacoes(values) {
-  const errors = {};
-
-  if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-    errors.email = 'Ops, insira um email válido';
-  }
-
-  if (values.senha.length < 5) {
-    errors.senha = 'Mínimo de 5 digitos';
-  }
-
-  return errors;
-}
-
 function Container() {
   const [userInfo, setUserInfo] = React.useState({
     email: '',
-    senha: '',
+    password: '',
   });
 
   const [errors, setErrors] = React.useState([]);
@@ -104,7 +82,7 @@ function Container() {
 
               const userDTO = {
                 email: userInfo.email,
-                senha: userInfo.senha,
+                password: userInfo.password,
                 grant_type: 'password',
               };
 
@@ -112,7 +90,7 @@ function Container() {
               setErrors(validacoesCampos);
 
               if (Object.keys(validacoesCampos).length === 0) {
-                if (userDTO.email === 'pizza@pizza.com' && userDTO.senha === 'pizza') {
+                if (userDTO.email === 'pizza@pizza.com' && userDTO.password === 'pizza') {
                   setErrors({ acessoliberado: 'Acesso Efetuado' });
                 } else {
                   setErrors({ acessonegado: 'Dados de Acesso inválidos' });
@@ -141,12 +119,12 @@ function Container() {
               </Label>
               <TextInput
                 icone="/images/login/password.jpg"
-                name="senha"
+                name="password"
                 type="password"
-                value={userInfo.senha}
+                value={userInfo.password}
                 onChange={handleChange}
               />
-              {errors.senha && <MensagemErro>{errors.senha}</MensagemErro>}
+              {errors.password && <MensagemErro>{errors.password}</MensagemErro>}
 
               <Link href="/login" passHref>
                 <a href="/login">Esqueceu sua senha?</a>
@@ -155,7 +133,7 @@ function Container() {
                 Acessar
               </Button>
               <Button
-                color="#FFB563"
+                style={{ backgroundColor: '#FFB563' }}
               >
                 <Link href="/cadastro" passHref>
                   <a href="/cadastro">Cadastra-se</a>
