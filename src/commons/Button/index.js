@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import styled from 'styled-components';
 
@@ -20,11 +21,11 @@ const ElementButton = styled.button`
 `;
 
 // eslint-disable-next-line react/prop-types
-export default function Button({ children, color }) {
+export default function Button({ children, ...props }) {
   return (
     <>
       <ElementButton
-        color={color}
+        {...props}
       >
         {children}
       </ElementButton>

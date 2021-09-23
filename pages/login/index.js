@@ -133,7 +133,7 @@ function Container() {
                 Acessar
               </Button>
               <Button
-                color="#FFB563"
+                style={{ backgroundColor: '#FFB563' }}
               >
                 <Link href="/cadastro" passHref>
                   <a href="/cadastro">Cadastra-se</a>

@@ -5,8 +5,24 @@ export default function validacoes(values) {
     errors.email = 'Ops, insira um email válido';
   }
 
-  if (values.senha.length < 5) {
-    errors.senha = 'Mínimo de 5 digitos';
+  if (values.password.length < 5) {
+    errors.password = 'Mínimo de 5 digitos';
+  }
+
+  // Formulario de Cadastro
+  if (values.firstName.length < 3) {
+    errors.firstName = 'Campo obrigatório';
+  }
+  if (values.lastName.length < 3) {
+    errors.lastName = 'Campo obrigatório';
+  }
+  if (values.telephone.length < 11) {
+    errors.telephone = 'Mínimo de 10 digitos';
+  }
+  if (values.passwordtwo.length === 0) {
+    errors.passwordtwo = 'Campo obrigatório';
+  } else if (values.passwordtwo !== values.password) {
+    errors.passwordtwo = 'Senhas não conferem';
   }
 
   return errors;
