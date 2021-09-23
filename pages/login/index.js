@@ -1,16 +1,16 @@
 /* eslint-disable no-console */
 /* eslint-disable react/jsx-no-bind */
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import Link from 'next/link';
-import axios from 'axios';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
 import TextInput from '../../src/commons/TextField';
 import Label from '../../src/commons/Label';
 import Button from '../../src/commons/Button';
+import validacoes from '../../src/commons/Validations';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -43,20 +43,6 @@ const MensagemErro = styled.div`
 const MensagemOk = styled(MensagemErro)`
   color: green;
 `;
-
-function validacoes(values) {
-  const errors = {};
-
-  if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-    errors.email = 'Ops, insira um email válido';
-  }
-
-  if (values.senha.length < 5) {
-    errors.senha = 'Mínimo de 5 digitos';
-  }
-
-  return errors;
-}
 
 function Container() {
   const [userInfo, setUserInfo] = React.useState({
