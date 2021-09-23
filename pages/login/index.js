@@ -11,6 +11,7 @@ import TextInput from '../../src/commons/TextField';
 import Label from '../../src/commons/Label';
 import Button from '../../src/commons/Button';
 import validacoes from '../../src/commons/Validations';
+import { MensagemErro, MensagemOk } from '../../src/commons/MessageInput';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -33,15 +34,6 @@ const Form = styled.form`
     display: block;
   }
   padding-bottom: 16px;
-`;
-
-const MensagemErro = styled.div`
-  color: red;
-  padding-left: 8px;
-  padding-top: 4px;
-`;
-const MensagemOk = styled(MensagemErro)`
-  color: green;
 `;
 
 function Container() {
