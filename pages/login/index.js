@@ -39,7 +39,7 @@ const Form = styled.form`
 function Container() {
   const [userInfo, setUserInfo] = React.useState({
     email: '',
-    senha: '',
+    password: '',
   });
 
   const [errors, setErrors] = React.useState([]);
@@ -82,7 +82,7 @@ function Container() {
 
               const userDTO = {
                 email: userInfo.email,
-                senha: userInfo.senha,
+                password: userInfo.password,
                 grant_type: 'password',
               };
 
@@ -90,7 +90,7 @@ function Container() {
               setErrors(validacoesCampos);
 
               if (Object.keys(validacoesCampos).length === 0) {
-                if (userDTO.email === 'pizza@pizza.com' && userDTO.senha === 'pizza') {
+                if (userDTO.email === 'pizza@pizza.com' && userDTO.password === 'pizza') {
                   setErrors({ acessoliberado: 'Acesso Efetuado' });
                 } else {
                   setErrors({ acessonegado: 'Dados de Acesso inválidos' });
@@ -119,12 +119,12 @@ function Container() {
               </Label>
               <TextInput
                 icone="/images/login/password.jpg"
-                name="senha"
+                name="password"
                 type="password"
-                value={userInfo.senha}
+                value={userInfo.password}
                 onChange={handleChange}
               />
-              {errors.senha && <MensagemErro>{errors.senha}</MensagemErro>}
+              {errors.password && <MensagemErro>{errors.password}</MensagemErro>}
 
               <Link href="/login" passHref>
                 <a href="/login">Esqueceu sua senha?</a>

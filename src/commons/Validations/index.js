@@ -4,9 +4,12 @@ export default function validacoes(values) {
   if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
     errors.email = 'Ops, insira um email válido';
   }
-
   if (values.password.length < 5) {
     errors.password = 'Mínimo de 5 digitos';
+  }
+
+  if (values.firstName === undefined) {
+    return errors;
   }
 
   // Formulario de Cadastro
