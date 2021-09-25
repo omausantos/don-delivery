@@ -90,11 +90,29 @@ function Container() {
               setErrors(validacoesCampos);
 
               if (Object.keys(validacoesCampos).length === 0) {
-                if (userDTO.email === 'pizza@pizza.com' && userDTO.password === 'pizza') {
-                  setErrors({ acessoliberado: 'Acesso Efetuado' });
-                } else {
-                  setErrors({ acessonegado: 'Dados de Acesso inválidos' });
-                }
+                fetch('https://don-delivery.herokuapp.com/auth', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(userDTO),
+                })
+                  .then(async (respostaDoServer) => {
+                    const dadosDaResposta = await respostaDoServer.json();
+
+                    if (dadosDaResposta.token) {
+                      setErrors({ acessoliberado: 'Acesso Efetuado' });
+                    } else {
+                      setErrors({ acessonegado: 'Dados de Acesso inválidos' });
+                    }
+
+                    // const { token } = dadosDaResposta;
+                    // nookies.set(null, 'USER_TOKEN', token, {
+                    //   path: '/',
+                    //   maxAge: 86400 * 7,
+                    // });
+                    // router.push(`/user/${githubUser}`);
+                  });
               }
             }}
             >
