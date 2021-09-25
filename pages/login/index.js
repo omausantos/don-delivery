@@ -4,6 +4,8 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import Link from 'next/link';
+import nookies from 'nookies';
+import { useRouter } from 'next/router';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
@@ -37,6 +39,7 @@ const Form = styled.form`
 `;
 
 function Container() {
+  const router = useRouter();
   const [userInfo, setUserInfo] = React.useState({
     email: '',
     password: '',
@@ -101,7 +104,12 @@ function Container() {
                     const dadosDaResposta = await respostaDoServer.json();
 
                     if (dadosDaResposta.token) {
-                      setErrors({ acessoliberado: 'Acesso Efetuado' });
+                      const { token } = dadosDaResposta;
+                      nookies.set(null, 'USER_TOKEN', token, {
+                        path: '/',
+                        maxAge: 86400 * 7,
+                      });
+                      router.push('/usuario');
                     } else {
                       setErrors({ acessonegado: 'Dados de Acesso inválidos' });
                     }
