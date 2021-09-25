@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-no-bind */
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
+import nookies from 'nookies';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
@@ -87,21 +88,37 @@ function Container() {
                 email: userInfo.email,
                 password: userInfo.password,
                 passwordtwo: userInfo.passwordtwo,
+                roles: [{ id: 1 }, { id: 2 }],
               };
 
               const validacoesCampos = validacoes(userDTO);
               setErrors(validacoesCampos);
 
               if (Object.keys(validacoesCampos).length === 0) {
-                setErrors({ acessoliberado: 'Cadastro Efetuado' });
-                setUserInfo({
-                  firstName: '',
-                  lastName: '',
-                  telephone: '',
-                  email: '',
-                  password: '',
-                  passwordtwo: '',
-                });
+                fetch('https://don-delivery.herokuapp.com/users', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(userDTO),
+                })
+                  .then(async (respostaDoServer) => {
+                    const dadosDaResposta = await respostaDoServer.json();
+
+                    if (dadosDaResposta.errors) {
+                      setErrors({ acessonegado: dadosDaResposta.errors[0].message });
+                    } else {
+                      setErrors({ acessoliberado: 'Cadastro Efetuado' });
+                      setUserInfo({
+                        firstName: '',
+                        lastName: '',
+                        telephone: '',
+                        email: '',
+                        password: '',
+                        passwordtwo: '',
+                      });
+                    }
+                  });
               }
             }}
             >
@@ -110,6 +127,7 @@ function Container() {
               </h1>
 
               {errors.acessoliberado && <MensagemOk style={{ textAlign: 'center', fontSize: '1.5rem', paddingBottom: '24px' }}>{errors.acessoliberado}</MensagemOk>}
+              {errors.acessonegado && <MensagemErro style={{ textAlign: 'center', fontSize: '1.5rem', paddingBottom: '24px' }}>{errors.acessonegado}</MensagemErro>}
 
               <Grid.Row>
 
@@ -150,6 +168,7 @@ function Container() {
                     Telefone
                   </Label>
                   <TextInput
+                    placeholder="(99) 99999-9999"
                     icone="/images/phone.jpg"
                     name="telephone"
                     value={userInfo.telephone}
