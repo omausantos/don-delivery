@@ -4,6 +4,8 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import Link from 'next/link';
+import nookies from 'nookies';
+import { useRouter } from 'next/router';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
@@ -37,6 +39,7 @@ const Form = styled.form`
 `;
 
 function Container() {
+  const router = useRouter();
   const [userInfo, setUserInfo] = React.useState({
     email: '',
     password: '',
@@ -90,19 +93,54 @@ function Container() {
               setErrors(validacoesCampos);
 
               if (Object.keys(validacoesCampos).length === 0) {
-                if (userDTO.email === 'pizza@pizza.com' && userDTO.password === 'pizza') {
-                  setErrors({ acessoliberado: 'Acesso Efetuado' });
-                } else {
-                  setErrors({ acessonegado: 'Dados de Acesso inválidos' });
-                }
+                fetch('https://don-delivery.herokuapp.com/auth', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(userDTO),
+                })
+                  .then(async (respostaDoServer) => {
+                    const dadosDaResposta = await respostaDoServer.json();
+
+                    if (dadosDaResposta.token) {
+                      const { token } = dadosDaResposta;
+                      nookies.set(null, 'USER_TOKEN', token, {
+                        path: '/',
+                        maxAge: 86400 * 7,
+                      });
+                      router.push('/usuario');
+                    } else {
+                      setErrors({ acessonegado: 'Dados de Acesso inválidos' });
+                    }
+
+                    // const { token } = dadosDaResposta;
+                    // nookies.set(null, 'USER_TOKEN', token, {
+                    //   path: '/',
+                    //   maxAge: 86400 * 7,
+                    // });
+                    // router.push(`/user/${githubUser}`);
+                  });
               }
             }}
             >
               <h1>
                 Bem-vindo!
               </h1>
-              {errors.acessonegado && <MensagemErro>{errors.acessonegado}</MensagemErro>}
-              {errors.acessoliberado && <MensagemOk>{errors.acessoliberado}</MensagemOk>}
+              {errors.acessonegado && (
+              <MensagemErro
+                style={{ textAlign: 'center', fontSize: '1.1rem', paddingBottom: '8px' }}
+              >
+                {errors.acessonegado}
+              </MensagemErro>
+              )}
+              {errors.acessoliberado && (
+              <MensagemOk
+                style={{ textAlign: 'center', fontSize: '1.1rem', paddingBottom: '8px' }}
+              >
+                {errors.acessoliberado}
+              </MensagemOk>
+              )}
               <Label>
                 E-mail
               </Label>
