@@ -119,8 +119,20 @@ function Container() {
               <h1>
                 Bem-vindo!
               </h1>
-              {errors.acessonegado && <MensagemErro>{errors.acessonegado}</MensagemErro>}
-              {errors.acessoliberado && <MensagemOk>{errors.acessoliberado}</MensagemOk>}
+              {errors.acessonegado && (
+              <MensagemErro
+                style={{ textAlign: 'center', fontSize: '1.1rem', paddingBottom: '8px' }}
+              >
+                {errors.acessonegado}
+              </MensagemErro>
+              )}
+              {errors.acessoliberado && (
+              <MensagemOk
+                style={{ textAlign: 'center', fontSize: '1.1rem', paddingBottom: '8px' }}
+              >
+                {errors.acessoliberado}
+              </MensagemOk>
+              )}
               <Label>
                 E-mail
               </Label>
