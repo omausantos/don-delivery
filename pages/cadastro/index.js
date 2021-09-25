@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-no-bind */
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
-import nookies from 'nookies';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
