@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }) {
       <Head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
-        <link href="https://fonts.googleapis.com/css2?family=Calistoga&family=Didact+Gothic&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Calistoga&family=Didact+Gothic&family=Lily+Script+One&display=swap" rel="stylesheet" />
         <title>Cantina Don Corleone - Desde 1970</title>
         <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png" />
         <link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png" />
