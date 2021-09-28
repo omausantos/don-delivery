@@ -185,7 +185,7 @@ function Produtos() {
                 <br />
                 Quantidade:
                 {' '}
-                <select>
+                <select name="quantidade">
                   <option value="1">1</option>
                   <option value="2">2</option>
                 </select>
