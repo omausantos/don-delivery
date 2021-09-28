@@ -19,6 +19,7 @@ export default function Footer() {
                 xs: '12px',
                 md: '16px',
               },
+              fontFamily: 'Calistoga',
             }}
           >
             @Cantina Don Corleone – CNPJ :00.000.000/0001-00
