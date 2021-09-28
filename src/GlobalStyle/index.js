@@ -11,7 +11,7 @@ const GlobalStyle = createGlobalStyle`
     body {
         margin: 0;
         padding: 0;    
-        font-family: 'Lily Script One', cursive;
+        font-family: 'Didact Gothic',sans-serif;
     }
 
     img {
