@@ -132,8 +132,8 @@ export default function Produtos({ produtos }) {
               ))}
             </ListaProdutos>
             <Next>
-              <Link href="/login" passHref>
-                <a href="/login">Finalizar pedido</a>
+              <Link href="/pedido" passHref>
+                <a href="/pedido">Finalizar pedido</a>
               </Link>
             </Next>
           </Grid.Col>

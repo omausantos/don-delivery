@@ -1,6 +1,7 @@
 import React from 'react';
 import nookies from 'nookies';
 import { createGlobalStyle } from 'styled-components';
+import Link from 'next/link';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
 import Footer from '../../src/commons/Footer';
@@ -20,6 +21,9 @@ export default function PageUsuario() {
         <Grid.Row>
           <Grid.Col>
             <h1 style={{ color: '#fff' }}>Atualize seus dados</h1>
+            <Link href="/produtos" passHref>
+              <a style={{ color: '#fff' }} href="/produtos">Escolher produtos</a>
+            </Link>
           </Grid.Col>
         </Grid.Row>
       </Grid.Container>

@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import styled, { createGlobalStyle, css } from 'styled-components';
+import Link from 'next/link';
 import Button from '../../src/commons/Button';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
@@ -85,7 +86,7 @@ function Endereco() {
             <TextInputBorder
               icone=""
               name="logradouro"
-              value="Rua"
+              value="Rua Silva Bueno"
             />
           </Grid.Col>
           <Grid.Col
@@ -95,7 +96,7 @@ function Endereco() {
             <TextInputBorder
               icone=""
               name="numero"
-              value=""
+              value="150"
             />
           </Grid.Col>
           <Grid.Col
@@ -105,7 +106,7 @@ function Endereco() {
             <TextInputBorder
               icone=""
               name="complemento"
-              value=""
+              value="Apartamento 501"
             />
           </Grid.Col>
         </Grid.Row>
@@ -296,7 +297,9 @@ export default function Pedido() {
               <Produtos />
               <ButtonClose>
                 <Button>
-                  Prosseguir para pagamento
+                  <Link href="/pedido/finalizar" passHref>
+                    <a style={{ color: '#fff' }} href="/pedido/finalizar">Prosseguir para pagamento</a>
+                  </Link>
                 </Button>
               </ButtonClose>
             </form>

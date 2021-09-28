@@ -9,6 +9,7 @@ const HeaderWrapper = styled.header`
   align-items: center;
   padding: 8px 16px;
   font-size: 16px;
+  font-family: 'Lily Script One', cursive;
   img {
     ${breakpointsMedia({
     xs: css`
