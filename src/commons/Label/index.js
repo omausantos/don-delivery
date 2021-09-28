@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import styled from 'styled-components';
 
@@ -11,10 +12,12 @@ const ElementLabel = styled.label`
 `;
 
 // eslint-disable-next-line react/prop-types
-export default function Label({ children }) {
+export default function Label({ children, ...props }) {
   return (
     <>
-      <ElementLabel>
+      <ElementLabel
+        {...props}
+      >
         {children}
       </ElementLabel>
     </>
