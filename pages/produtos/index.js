@@ -88,10 +88,10 @@ export default function Produtos({ produtos }) {
   const [quantidades, setQuantidades] = React.useState(0);
   const [pedido, setPedido] = React.useState({ produtos: {} });
 
-  function incluirPedido(item) {
+  function incluirPedido(item, price) {
     const qtdItem = pedido.produtos[`item${item}`];
     const qtd = qtdItem ? (qtdItem.qtd + 1) : 1;
-    const produto = Object.assign(pedido.produtos, { [`item${item}`]: { id: item, qtd } });
+    const produto = Object.assign(pedido.produtos, { [`item${item}`]: { id: item, qtd, price } });
     setPedido({ produtos: produto });
     setQuantidades(quantidades + 1);
 
@@ -151,7 +151,7 @@ export default function Produtos({ produtos }) {
                   </div>
                   <h3>{produto.name}</h3>
                   <p>{produto.description}</p>
-                  <button onClick={() => incluirPedido(produto.id)}>
+                  <button onClick={() => incluirPedido(produto.id, produto.price)}>
                     Adicionar R$
                     {produto.price}
                   </button>
