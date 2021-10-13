@@ -3,6 +3,7 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import Link from 'next/link';
+import nookies from 'nookies';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
 import Footer from '../../src/commons/Footer';
@@ -84,6 +85,18 @@ const Next = styled.div`
 
 // eslint-disable-next-line react/prop-types
 export default function Produtos({ produtos }) {
+  const [quantidades, setQuantidades] = React.useState(0);
+  const [pedido, setPedido] = React.useState([]);
+
+  function incluirPedido(item) {
+    pedido.push(item);
+    setQuantidades(quantidades + 1);
+    nookies.set(null, 'USER_PEDIDO', JSON.stringify(pedido), {
+      path: '/',
+      maxAge: 86400 * 7,
+    });
+  }
+
   return (
     <>
       <GlobalStyle />
@@ -113,7 +126,17 @@ export default function Produtos({ produtos }) {
               </div>
               <div>
                 <img src="/images/produtos/carrinho.png" alt="Seu Carrinho" />
-                <p>Carrinho</p>
+                <p>
+                  Carrinho
+                  <span>
+                    {' '}
+                    (
+                    <strong>
+                      {quantidades}
+                    </strong>
+                    )
+                  </span>
+                </p>
               </div>
             </HeaderContainer>
             <ListaProdutos>
@@ -124,7 +147,7 @@ export default function Produtos({ produtos }) {
                   </div>
                   <h3>{produto.name}</h3>
                   <p>{produto.description}</p>
-                  <button>
+                  <button onClick={() => incluirPedido(produto.id)}>
                     Adicionar R$
                     {produto.price}
                   </button>
