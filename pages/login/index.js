@@ -109,17 +109,10 @@ function Container() {
                         path: '/',
                         maxAge: 86400 * 7,
                       });
-                      router.push('/usuario');
+                      router.push('/produtos');
                     } else {
                       setErrors({ acessonegado: 'Dados de Acesso inválidos' });
                     }
-
-                    // const { token } = dadosDaResposta;
-                    // nookies.set(null, 'USER_TOKEN', token, {
-                    //   path: '/',
-                    //   maxAge: 86400 * 7,
-                    // });
-                    // router.push(`/user/${githubUser}`);
                   });
               }
             }}

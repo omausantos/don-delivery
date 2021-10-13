@@ -1,7 +1,12 @@
+/* eslint-disable radix */
+/* eslint-disable no-return-assign */
+/* eslint-disable max-len */
+/* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import styled, { createGlobalStyle, css } from 'styled-components';
 import Link from 'next/link';
+import nookies from 'nookies';
 import Button from '../../src/commons/Button';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
@@ -170,91 +175,97 @@ const ButtonClose = styled.div`
   }  
 `;
 
-function Produtos() {
+function ProdutoHtml({ info, alterarQuantidade, infoProdutoPedido }) {
+  const [valor, setValor] = React.useState(info.price * infoProdutoPedido.qtd);
+
+  const handleChange = (event) => {
+    const valorProduto = info.price * event.target.value;
+    setValor(valorProduto);
+    alterarQuantidade(infoProdutoPedido.id, parseInt(event.target.value), info.price);
+  };
+
+  const selectedOption = (option, value) => {
+    if (option === value) {
+      return true;
+    }
+    return false;
+  };
+
+  const selectOption = [1, 2, 3, 4, 5];
+
+  return (
+    <>
+      <div>
+        <div className="img">
+          <img src={info.imageUri} alt={info.name} />
+        </div>
+        <div>
+          {info.name}
+          <br />
+          Quantidade:
+          {' '}
+          <select name="quantidade" onChange={handleChange}>
+            {selectOption.map((item) => (
+              <option key={item} value={item} selected={selectedOption(item, infoProdutoPedido.qtd)}>{item}</option>
+            ))}
+          </select>
+          {' '}
+          <br />
+          Preço:
+          {' '}
+          <strong>
+            R$
+            {' '}
+            {valor}
+          </strong>
+        </div>
+      </div>
+      <a href="#">
+        Remover Item
+      </a>
+    </>
+  );
+}
+
+function Produtos({ listaProdutos, listaProdutosPedido }) {
+  const findProductById = (id) => {
+    const item = listaProdutos.find((element) => element.id === id);
+    return item;
+  };
+
+  const [listaProdutosPedidoFinal, setListaProdutosPedidoFinal] = React.useState(listaProdutosPedido);
+
+  const valorTotal = (lista) => {
+    let valorSoma = 0;
+    Object.keys(lista).map((item) => valorSoma += parseInt(lista[item].qtd * lista[item].price));
+    return valorSoma;
+  };
+
+  const [valor, setValor] = React.useState(valorTotal(listaProdutosPedido));
+
+  const alterarQuantidade = (item, qtd, price) => {
+    const produto = Object.assign(listaProdutosPedidoFinal, { [`item${item}`]: { id: item, qtd, price } });
+    setListaProdutosPedidoFinal(produto);
+    setValor(valorTotal(listaProdutosPedidoFinal));
+  };
+
   return (
     <>
       <Container>
         <h2>Passo 02 - Confirme suas escolhas</h2>
         <ListaProdutos>
-          <li>
-            <div>
-              <div className="img">
-                <img src="https://raw.githubusercontent.com/devsuperior/sds2/master/assets/macarrao_espaguete.jpg" alt="" />
-              </div>
-              <div>
-                Pizza de calabreza
-                <br />
-                Quantidade:
-                {' '}
-                <select name="quantidade">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                </select>
-                {' '}
-                <br />
-                Preço:
-                {' '}
-                <strong>R$ 29.00</strong>
-              </div>
-            </div>
-            <a href="#">
-              Remover Item
-            </a>
-
-          </li>
-          <li>
-            <div>
-              <div className="img">
-                <img src="https://raw.githubusercontent.com/devsuperior/sds2/master/assets/macarrao_espaguete.jpg" alt="" />
-              </div>
-              <div>
-                Pizza de calabreza
-                <br />
-                Quantidade:
-                {' '}
-                <select>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                </select>
-                {' '}
-                <br />
-                Preço:
-                {' '}
-                <strong>R$ 29.00</strong>
-              </div>
-            </div>
-            <a href="#">
-              Remover Item
-            </a>
-          </li>
-          <li>
-            <div>
-              <div className="img">
-                <img src="https://raw.githubusercontent.com/devsuperior/sds2/master/assets/macarrao_espaguete.jpg" alt="" />
-              </div>
-              <div>
-                Pizza de calabreza
-                <br />
-                Quantidade:
-                {' '}
-                <select>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                </select>
-                {' '}
-                <br />
-                Preço:
-                {' '}
-                <strong>R$ 29.00</strong>
-              </div>
-            </div>
-            <a href="#">
-              Remover Item
-            </a>
-          </li>
+          {Object.keys(listaProdutosPedido).map((item) => (
+            <li key={item}>
+              <ProdutoHtml info={findProductById(listaProdutosPedido[item].id)} alterarQuantidade={alterarQuantidade} infoProdutoPedido={listaProdutosPedido[item]} />
+            </li>
+          ))}
           <li>
             <div />
-            <strong>Total: R$ 87.00</strong>
+            <strong>
+              Total: R$
+              {' '}
+              {valor}
+            </strong>
           </li>
         </ListaProdutos>
       </Container>
@@ -267,7 +278,7 @@ const TextInputBorder = styled(TextInput)`
   margin: 8px 0;
 `;
 
-export default function Pedido() {
+export default function Pedido({ listaProdutos, listaProdutosPedido }) {
   return (
     <>
       <GlobalStyle />
@@ -294,7 +305,7 @@ export default function Pedido() {
                 <h1>Detalhes do seu pedido</h1>
               </HeaderContainer>
               <Endereco />
-              <Produtos />
+              <Produtos listaProdutos={listaProdutos} listaProdutosPedido={listaProdutosPedido} />
               <ButtonClose>
                 <Button>
                   <Link href="/pedido/finalizar" passHref>
@@ -309,4 +320,21 @@ export default function Pedido() {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context);
+  const listaProdutosPedido = JSON.parse(cookies.USER_PEDIDO);
+
+  const listaProdutos = await fetch('https://don-delivery.herokuapp.com/products').then(async (res) => {
+    const response = await res.json();
+    return response;
+  });
+
+  return {
+    props: {
+      listaProdutos,
+      listaProdutosPedido: listaProdutosPedido.produtos,
+    },
+  };
 }
