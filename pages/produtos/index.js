@@ -86,7 +86,7 @@ const Next = styled.div`
 // eslint-disable-next-line react/prop-types
 export default function Produtos({ produtos }) {
   const [quantidades, setQuantidades] = React.useState(0);
-  const [pedido, setPedido] = React.useState([]);
+  const [pedido] = React.useState([]);
 
   function incluirPedido(item) {
     pedido.push(item);
