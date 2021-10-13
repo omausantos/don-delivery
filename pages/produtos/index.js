@@ -86,11 +86,15 @@ const Next = styled.div`
 // eslint-disable-next-line react/prop-types
 export default function Produtos({ produtos }) {
   const [quantidades, setQuantidades] = React.useState(0);
-  const [pedido] = React.useState([]);
+  const [pedido, setPedido] = React.useState({ produtos: {} });
 
   function incluirPedido(item) {
-    pedido.push(item);
+    const qtdItem = pedido.produtos[`item${item}`];
+    const qtd = qtdItem ? (qtdItem.qtd + 1) : 1;
+    const produto = Object.assign(pedido.produtos, { [`item${item}`]: { id: item, qtd } });
+    setPedido({ produtos: produto });
     setQuantidades(quantidades + 1);
+
     nookies.set(null, 'USER_PEDIDO', JSON.stringify(pedido), {
       path: '/',
       maxAge: 86400 * 7,
