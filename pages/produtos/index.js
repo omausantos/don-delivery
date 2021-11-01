@@ -7,6 +7,7 @@ import nookies from 'nookies';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
 import Footer from '../../src/commons/Footer';
+import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -122,10 +123,11 @@ export default function Produtos({ produtos }) {
             }}
           >
             <HeaderContainer>
-              <div></div>
+              <div />
               <div style={{
-                padding: '10px'
-              }}>
+                padding: '10px',
+              }}
+              >
                 <img src="/images/produtos/carrinho.png" alt="Seu Carrinho" />
                 <p>
                   Carrinho
@@ -149,8 +151,11 @@ export default function Produtos({ produtos }) {
                   <h3>{produto.name}</h3>
                   <p>{produto.description}</p>
                   <button onClick={() => incluirPedido(produto.id, produto.price)}>
-                    Adicionar R$
-                    {produto.price}
+                    Adicionar
+                    {' '}
+                    <FormatarValorReal
+                      value={produto.price}
+                    />
                   </button>
                 </li>
               ))}
