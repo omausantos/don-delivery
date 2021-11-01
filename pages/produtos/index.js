@@ -1,12 +1,14 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/button-has-type */
 import React from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle, css } from 'styled-components';
 import Link from 'next/link';
 import nookies from 'nookies';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
 import Footer from '../../src/commons/Footer';
+import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
+import breakpointsMedia from '../../src/theme/utils/breakpointsMedia';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -40,7 +42,14 @@ const ListaProdutos = styled.ul`
     flex-wrap: wrap;
     font-family: 'Didact Gothic';
     li {
-        width: 23%;
+    ${breakpointsMedia({
+    sm: css`
+          width: 98%;
+            `,
+    md: css`
+          width: 23%; 
+            `,
+  })};
         margin: 0 1%;
         background-color: #fff;
         border: solid 1px #ccc;
@@ -48,7 +57,12 @@ const ListaProdutos = styled.ul`
         padding: 16px;
         margin-bottom: 16px;
         p {
-            min-height: 90px;
+          ${breakpointsMedia({
+    md: css`
+                min-height: 90px; 
+                          `,
+  })};
+           
         }
         div {
             border-radius: 16px;
@@ -122,13 +136,11 @@ export default function Produtos({ produtos }) {
             }}
           >
             <HeaderContainer>
-              <div>
-                <img src="/images/produtos/pizza.png" alt="Icone de Pizza" />
-                <p>Pizza</p>
-                <img src="/images/produtos/soda.png" alt="Icone de Bebidas" />
-                <p>Bebidas</p>
-              </div>
-              <div>
+              <div />
+              <div style={{
+                padding: '10px',
+              }}
+              >
                 <img src="/images/produtos/carrinho.png" alt="Seu Carrinho" />
                 <p>
                   Carrinho
@@ -152,8 +164,11 @@ export default function Produtos({ produtos }) {
                   <h3>{produto.name}</h3>
                   <p>{produto.description}</p>
                   <button onClick={() => incluirPedido(produto.id, produto.price)}>
-                    Adicionar R$
-                    {produto.price}
+                    Adicionar
+                    {' '}
+                    <FormatarValorReal
+                      value={produto.price}
+                    />
                   </button>
                 </li>
               ))}
