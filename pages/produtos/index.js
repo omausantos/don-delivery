@@ -122,13 +122,10 @@ export default function Produtos({ produtos }) {
             }}
           >
             <HeaderContainer>
-              <div>
-                <img src="/images/produtos/pizza.png" alt="Icone de Pizza" />
-                <p>Pizza</p>
-                <img src="/images/produtos/soda.png" alt="Icone de Bebidas" />
-                <p>Bebidas</p>
-              </div>
-              <div>
+              <div></div>
+              <div style={{
+                padding: '10px'
+              }}>
                 <img src="/images/produtos/carrinho.png" alt="Seu Carrinho" />
                 <p>
                   Carrinho
