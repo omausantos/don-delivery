@@ -14,6 +14,7 @@ import Header from '../../src/commons/Header';
 import Label from '../../src/commons/Label';
 import TextInput from '../../src/commons/TextField';
 import breakpointsMedia from '../../src/theme/utils/breakpointsMedia';
+import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -214,9 +215,9 @@ function ProdutoHtml({ info, alterarQuantidade, infoProdutoPedido }) {
           Preço:
           {' '}
           <strong>
-            R$
-            {' '}
-            {valor}
+            <FormatarValorReal
+              value={valor}
+            />
           </strong>
         </div>
       </div>
@@ -262,9 +263,11 @@ function Produtos({ listaProdutos, listaProdutosPedido }) {
           <li>
             <div />
             <strong>
-              Total: R$
+              Total:
               {' '}
-              {valor}
+              <FormatarValorReal
+                value={valor}
+              />
             </strong>
           </li>
         </ListaProdutos>
