@@ -238,7 +238,7 @@ function Produtos({ listaProdutos, listaProdutosPedido }) {
 
   const valorTotal = (lista) => {
     let valorSoma = 0;
-    Object.keys(lista).map((item) => valorSoma += parseInt(lista[item].qtd * lista[item].price));
+    Object.keys(lista).map((item) => valorSoma += parseFloat(lista[item].qtd * lista[item].price));
     return valorSoma;
   };
 
