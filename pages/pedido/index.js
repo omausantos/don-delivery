@@ -192,7 +192,7 @@ function ProdutoHtml({ info, alterarQuantidade, infoProdutoPedido }) {
     return false;
   };
 
-  const selectOption = [1, 2, 3, 4, 5];
+  const selectOption = [0, 1, 2, 3, 4, 5];
 
   return (
     <>
@@ -219,11 +219,13 @@ function ProdutoHtml({ info, alterarQuantidade, infoProdutoPedido }) {
               value={valor}
             />
           </strong>
+          <br />
+          {/* <a href="#">
+            Remover Item
+          </a> */}
         </div>
       </div>
-      <a href="#">
-        Remover Item
-      </a>
+
     </>
   );
 }
@@ -245,7 +247,14 @@ function Produtos({ listaProdutos, listaProdutosPedido }) {
   const [valor, setValor] = React.useState(valorTotal(listaProdutosPedido));
 
   const alterarQuantidade = (item, qtd, price) => {
-    const produto = Object.assign(listaProdutosPedidoFinal, { [`item${item}`]: { id: item, qtd, price } });
+    let produto;
+    if (qtd > 0) {
+      produto = Object.assign(listaProdutosPedidoFinal, { [`item${item}`]: { id: item, qtd, price } });
+    } else {
+      delete listaProdutosPedidoFinal[`item${item}`];
+      produto = listaProdutosPedidoFinal;
+    }
+
     setListaProdutosPedidoFinal(produto);
     setValor(valorTotal(listaProdutosPedidoFinal));
   };
