@@ -136,6 +136,18 @@ const ListaProdutos = styled.ul`
         `,
   })};
   }
+  li.obs {
+    flex-direction: column;
+    text-align: center;
+    textarea {
+      width: 50%;
+      margin: auto;
+    }
+    strong {
+      font-size: 1.2rem;
+      margin-top: 10px;
+    }
+  }
   a {
     color: #0078AE;
     text-decoration: none;
@@ -257,6 +269,10 @@ function Produtos({ listaProdutos, listaProdutosPedido }) {
 
     setListaProdutosPedidoFinal(produto);
     setValor(valorTotal(listaProdutosPedidoFinal));
+    nookies.set(null, 'USER_PEDIDO', JSON.stringify({ produtos: produto }), {
+      path: '/',
+      maxAge: 86400 * 7,
+    });
   };
 
   return (
@@ -269,8 +285,9 @@ function Produtos({ listaProdutos, listaProdutosPedido }) {
               <ProdutoHtml info={findProductById(listaProdutosPedido[item].id)} alterarQuantidade={alterarQuantidade} infoProdutoPedido={listaProdutosPedido[item]} />
             </li>
           ))}
-          <li>
-            <div />
+          <li className="obs">
+            <p>Adicionar comentário ao pedido</p>
+            <Observacao />
             <strong>
               Total:
               {' '}
@@ -289,6 +306,14 @@ const TextInputBorder = styled(TextInput)`
   border: solid 1px #ccc;
   margin: 8px 0;
 `;
+
+function Observacao() {
+  return (
+    <>
+      <textarea placeholder="Ex: remover cebola, remover tomate." rows="3" />
+    </>
+  );
+}
 
 export default function Pedido({ listaProdutos, listaProdutosPedido }) {
   return (
