@@ -7,6 +7,10 @@ import React from 'react';
 import styled, { createGlobalStyle, css } from 'styled-components';
 import Link from 'next/link';
 import nookies from 'nookies';
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-places-autocomplete';
 import Button from '../../src/commons/Button';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
@@ -15,6 +19,7 @@ import Label from '../../src/commons/Label';
 import TextInput from '../../src/commons/TextField';
 import breakpointsMedia from '../../src/theme/utils/breakpointsMedia';
 import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
+import SimpleMap from '../../src/commons/Maps';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -51,69 +56,88 @@ const Container = styled.div`
         background: #A90F0F;
         color: #fff;
     }
+    .inputsearch {
+        position: relative;
+        .suggestion {
+          border: solid 1px #ccc;
+          border-top: 0;
+          width: 100%;
+          position: absolute;
+          background-color: #fff;
+          z-index: 999;
+          li {
+            padding:8px 4px;
+            border-top: solid 1px #ccc;
+            cursor: pointer;
+          }
+          li:first-child {
+            border-top: 0;
+          }
+        }
+    }    
 `;
 
 function Endereco() {
+  const [address, setAddress] = React.useState('');
+  const [coordinates, setCoordinates] = React.useState({
+    lat: -23.559872960108486,
+    lng: -46.60014993277882,
+  });
+
+  const handleSelect = async (value) => {
+    const results = await geocodeByAddress(value);
+    const latLng = await getLatLng(results[0]);
+    setAddress(value);
+    setCoordinates(latLng);
+  };
+
   return (
     <>
       <Container>
-        <h2>Passo 01 - Insira seu endereço</h2>
-        <Label>CEP</Label>
+        <h2>Passo 01 - Selecione onde o pedido deve ser entregue</h2>
         <Grid.Row>
           <Grid.Col
-            col={{ xs: 12, md: 6 }}
+            col={{ xs: 12, md: 12 }}
           >
-            <Grid.Row>
-              <Grid.Col
-                col={{ xs: 6, md: 8 }}
-              >
-                <TextInputBorder
-                  icone=""
-                  name="cep"
-                  value="04235100"
-                />
-              </Grid.Col>
-              <Grid.Col
-                col={{ xs: 6, md: 4 }}
-                style={{ display: 'flex', alignItems: 'center' }}
-              >
-                <Button>
-                  BUSCAR
-                </Button>
-              </Grid.Col>
-            </Grid.Row>
-          </Grid.Col>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Col
-            col={{ xs: 12, md: 6 }}
-          >
-            <Label>Endereço</Label>
-            <TextInputBorder
-              icone=""
-              name="logradouro"
-              value="Rua Silva Bueno"
-            />
-          </Grid.Col>
-          <Grid.Col
-            col={{ xs: 12, md: 2 }}
-          >
-            <Label>Número</Label>
-            <TextInputBorder
-              icone=""
-              name="numero"
-              value="150"
-            />
-          </Grid.Col>
-          <Grid.Col
-            col={{ xs: 12, md: 4 }}
-          >
-            <Label>Complemento</Label>
-            <TextInputBorder
-              icone=""
-              name="complemento"
-              value="Apartamento 501"
-            />
+            <PlacesAutocomplete
+              value={address}
+              onChange={setAddress}
+              onSelect={handleSelect}
+            >
+              {({
+                getInputProps, suggestions, getSuggestionItemProps, loading,
+              }) => (
+                <div className="inputsearch">
+                  <TextInputBorder
+                    {...getInputProps({ placeholder: 'Digite um endereço para entregar o pedido' })}
+                    style={{
+                      borderRadius: 0,
+                      boxShadow: 'none',
+                      borderTop: 0,
+                      borderRight: 0,
+                      borderLeft: 0,
+                      marginBottom: 0,
+                    }}
+                  />
+                  <ul className="suggestion">
+                    {loading ? <div>...loading</div> : null}
+
+                    {suggestions.map((suggestion) => {
+                      const style = {
+                        backgroundColor: suggestion.active ? '#f7f7f7' : '#fff',
+                      };
+
+                      return (
+                        <li {...getSuggestionItemProps(suggestion, { style })}>
+                          {suggestion.description}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+            </PlacesAutocomplete>
+            <SimpleMap text="Localização" lat={coordinates.lat} lng={coordinates.lng} />
           </Grid.Col>
         </Grid.Row>
       </Container>

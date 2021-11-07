@@ -36,6 +36,7 @@ export default function App({ Component, pageProps }) {
         <meta name="msapplication-TileColor" content="#ffffff" />
         <meta name="msapplication-TileImage" content="/favicon/ms-icon-144x144.png" />
         <meta name="theme-color" content="#ffffff" />
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBev6RyZJDJZXWKE-z6hquJRpRD66NfCqU&libraries=places" />
       </Head>
       <GlobalStyle />
       <ThemeProvider theme={theme}>
