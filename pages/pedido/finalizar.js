@@ -5,7 +5,6 @@ import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
 import Label from '../../src/commons/Label';
-import TextInput from '../../src/commons/TextField';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -43,56 +42,6 @@ const HeaderContainer = styled.header`
         margin-right: 8px;
     }
 `;
-
-const TextInputBorder = styled(TextInput)`
-  border: solid 1px #ccc;
-  margin: 8px 0;
-  :disabled {
-      background-color: #ccc;
-  }
-`;
-
-function Endereco() {
-  return (
-    <>
-      <Container>
-        <h2>Confirme seu endereço</h2>
-        <Grid.Row>
-          <Grid.Col
-            col={{ xs: 12, md: 6 }}
-          >
-            <Label>Endereço</Label>
-            <TextInputBorder
-              icone=""
-              name="logradouro"
-              value="Rua Silva Bueno"
-            />
-          </Grid.Col>
-          <Grid.Col
-            col={{ xs: 12, md: 2 }}
-          >
-            <Label>Número</Label>
-            <TextInputBorder
-              icone=""
-              name="numero"
-              value="150"
-            />
-          </Grid.Col>
-          <Grid.Col
-            col={{ xs: 12, md: 4 }}
-          >
-            <Label>Complemento</Label>
-            <TextInputBorder
-              icone=""
-              name="complemento"
-              value="Apartamento 501"
-            />
-          </Grid.Col>
-        </Grid.Row>
-      </Container>
-    </>
-  );
-}
 
 const ListaPagamentos = styled.ul`
     li {
@@ -242,7 +191,6 @@ export default function Finalizar() {
                 <img src="/images/pedido/pagamento.png" alt="Selecione seu método de pagamento" />
                 <h1>Pagamento</h1>
               </HeaderContainer>
-              <Endereco />
               <MetodoPagamento />
             </form>
           </Grid.Col>
