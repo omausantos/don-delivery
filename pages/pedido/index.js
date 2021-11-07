@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable radix */
 /* eslint-disable no-return-assign */
 /* eslint-disable max-len */
@@ -15,7 +16,6 @@ import Button from '../../src/commons/Button';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
-import Label from '../../src/commons/Label';
 import TextInput from '../../src/commons/TextField';
 import breakpointsMedia from '../../src/theme/utils/breakpointsMedia';
 import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
