@@ -6,12 +6,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import styled, { createGlobalStyle, css } from 'styled-components';
-import Link from 'next/link';
 import nookies from 'nookies';
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
+import router from 'next/router';
 import Button from '../../src/commons/Button';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
@@ -89,6 +89,15 @@ function Endereco() {
     const latLng = await getLatLng(results[0]);
     setAddress(value);
     setCoordinates(latLng);
+    const endereco = {
+      endereco: results[0].formatted_address,
+      lat: latLng.lat,
+      lng: latLng.lng,
+    };
+    nookies.set(null, 'USER_PEDIDO_ENDERECO', JSON.stringify({ endereco }), {
+      path: '/',
+      maxAge: 86400 * 7,
+    });
   };
 
   return (
@@ -331,10 +340,17 @@ const TextInputBorder = styled(TextInput)`
   margin: 8px 0;
 `;
 
+function handleChangeobs(event) {
+  nookies.set(null, 'USER_PEDIDO_OBS', JSON.stringify({ observacao: event.target.value }), {
+    path: '/',
+    maxAge: 86400 * 7,
+  });
+}
+
 function Observacao() {
   return (
     <>
-      <textarea placeholder="Ex: remover cebola, remover tomate." rows="3" />
+      <textarea onChange={handleChangeobs} placeholder="Ex: remover cebola, remover tomate." rows="3" />
     </>
   );
 }
@@ -360,7 +376,11 @@ export default function Pedido({ listaProdutos, listaProdutosPedido }) {
               margin: '16px 0',
             }}
           >
-            <form>
+            <form onSubmit={(event) => {
+              event.preventDefault();
+              router.push('/pedido/finalizar');
+            }}
+            >
               <HeaderContainer>
                 <img src="/images/pedido/icone.png" alt="Veja seu pedido" />
                 <h1>Detalhes do seu pedido</h1>
@@ -369,9 +389,7 @@ export default function Pedido({ listaProdutos, listaProdutosPedido }) {
               <Produtos listaProdutos={listaProdutos} listaProdutosPedido={listaProdutosPedido} />
               <ButtonClose>
                 <Button>
-                  <Link href="/pedido/finalizar" passHref>
-                    <a style={{ color: '#fff' }} href="/pedido/finalizar">Prosseguir para pagamento</a>
-                  </Link>
+                  Prosseguir para pagamento
                 </Button>
               </ButtonClose>
             </form>
