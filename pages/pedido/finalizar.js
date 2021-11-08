@@ -1,11 +1,15 @@
+/* eslint-disable no-return-assign */
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
+import nookies from 'nookies';
+import Link from 'next/link';
 import Button from '../../src/commons/Button';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
 import Label from '../../src/commons/Label';
-import TextInput from '../../src/commons/TextField';
+import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -43,56 +47,6 @@ const HeaderContainer = styled.header`
         margin-right: 8px;
     }
 `;
-
-const TextInputBorder = styled(TextInput)`
-  border: solid 1px #ccc;
-  margin: 8px 0;
-  :disabled {
-      background-color: #ccc;
-  }
-`;
-
-function Endereco() {
-  return (
-    <>
-      <Container>
-        <h2>Confirme seu endereço</h2>
-        <Grid.Row>
-          <Grid.Col
-            col={{ xs: 12, md: 6 }}
-          >
-            <Label>Endereço</Label>
-            <TextInputBorder
-              icone=""
-              name="logradouro"
-              value="Rua Silva Bueno"
-            />
-          </Grid.Col>
-          <Grid.Col
-            col={{ xs: 12, md: 2 }}
-          >
-            <Label>Número</Label>
-            <TextInputBorder
-              icone=""
-              name="numero"
-              value="150"
-            />
-          </Grid.Col>
-          <Grid.Col
-            col={{ xs: 12, md: 4 }}
-          >
-            <Label>Complemento</Label>
-            <TextInputBorder
-              icone=""
-              name="complemento"
-              value="Apartamento 501"
-            />
-          </Grid.Col>
-        </Grid.Row>
-      </Container>
-    </>
-  );
-}
 
 const ListaPagamentos = styled.ul`
     li {
@@ -138,7 +92,37 @@ const ButtonClose = styled.div`
   }  
 `;
 
-function MetodoPagamento() {
+function ProdutoList({ info, infoProdutoPedido }) {
+  return (
+    <>
+      {infoProdutoPedido.qtd}
+      {' '}
+      {info.name}
+      {' '}
+      <br />
+    </>
+  );
+}
+
+function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
+  const findProductById = (id) => {
+    const item = listaProdutos.find((element) => element.id === id);
+    return item;
+  };
+
+  const valorTotal = (lista) => {
+    let valorSoma = 0;
+    Object.keys(lista).map((item) => valorSoma += parseFloat(lista[item].qtd * lista[item].price));
+    return valorSoma;
+  };
+
+  const handleChange = (event) => {
+    nookies.set(null, 'USER_PEDIDO_PAGAMENTO', event.target.value, {
+      path: '/',
+      maxAge: 86400 * 7,
+    });
+  };
+
   return (
     <>
       <Container>
@@ -150,7 +134,7 @@ function MetodoPagamento() {
           >
             <ListaPagamentos>
               <li>
-                <input type="radio" value="1" name="pagamento" id="pagamento-cartao" />
+                <input type="radio" value="1" name="pagamento" id="pagamento-cartao" onChange={handleChange} />
                 <img src="/images/pedido/cartao.png" alt="Pagamento por cartão de crédito" />
                 <Label
                   for="pagamento-cartao"
@@ -159,7 +143,7 @@ function MetodoPagamento() {
                 </Label>
               </li>
               <li>
-                <input type="radio" value="2" name="pagamento" id="pagamento-pix" />
+                <input type="radio" value="2" name="pagamento" id="pagamento-pix" onChange={handleChange} />
                 <img src="/images/pedido/pix.png" alt="Pagamento por PIX" />
                 <Label
                   for="pagamento-pix"
@@ -168,7 +152,7 @@ function MetodoPagamento() {
                 </Label>
               </li>
               <li>
-                <input type="radio" value="3" name="pagamento" id="pagamento-dinheiro" />
+                <input type="radio" value="3" name="pagamento" id="pagamento-dinheiro" onChange={handleChange} />
                 <img src="/images/pedido/dinheiro.png" alt="Pagamento por Dinheiro" />
                 <Label
                   for="pagamento-dinheiro"
@@ -191,24 +175,33 @@ function MetodoPagamento() {
           >
             <Informacoes>
               <p>
-                01 Pizza Calabresa
-                <br />
-                01 Pizza Mussarela
-                <br />
-                01 Coca Cola 2L
+                {Object.keys(listaProdutosPedido).map((item) => (
+                  <span key={item}>
+                    <ProdutoList
+                      info={findProductById(listaProdutosPedido[item].id)}
+                      infoProdutoPedido={listaProdutosPedido[item]}
+                    />
+                  </span>
+                ))}
               </p>
               <p>
                 Total a ser pago:
                 {' '}
                 <br />
-                <strong>R$ 130,70</strong>
+                <strong>
+                  <FormatarValorReal
+                    value={valorTotal(listaProdutosPedido)}
+                  />
+                </strong>
               </p>
             </Informacoes>
           </Grid.Col>
         </Grid.Row>
         <ButtonClose>
           <Button>
-            Finalizar compra
+            <Link href="/order" passHref>
+              <a href="/order" style={{ color: '#fff' }}>Finalizar compra</a>
+            </Link>
           </Button>
         </ButtonClose>
       </Container>
@@ -216,7 +209,7 @@ function MetodoPagamento() {
   );
 }
 
-export default function Finalizar() {
+export default function Finalizar({ listaProdutos, listaProdutosPedido }) {
   return (
     <>
       <GlobalStyle />
@@ -242,8 +235,10 @@ export default function Finalizar() {
                 <img src="/images/pedido/pagamento.png" alt="Selecione seu método de pagamento" />
                 <h1>Pagamento</h1>
               </HeaderContainer>
-              <Endereco />
-              <MetodoPagamento />
+              <MetodoPagamento
+                listaProdutos={listaProdutos}
+                listaProdutosPedido={listaProdutosPedido}
+              />
             </form>
           </Grid.Col>
         </Grid.Row>
@@ -251,4 +246,21 @@ export default function Finalizar() {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context);
+  const listaProdutosPedido = JSON.parse(cookies.USER_PEDIDO);
+
+  const listaProdutos = await fetch('https://don-delivery.herokuapp.com/products').then(async (res) => {
+    const response = await res.json();
+    return response;
+  });
+
+  return {
+    props: {
+      listaProdutos,
+      listaProdutosPedido: listaProdutosPedido.produtos,
+    },
+  };
 }
