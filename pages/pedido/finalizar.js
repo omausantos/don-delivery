@@ -1,9 +1,12 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-return-assign */
 /* eslint-disable react/prop-types */
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import nookies from 'nookies';
-import Link from 'next/link';
+import Cookies from 'js-cookie';
+import router from 'next/router';
 import Button from '../../src/commons/Button';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
@@ -123,6 +126,46 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
     });
   };
 
+  const handleClick = (event) => {
+    event.preventDefault();
+    const endereco = JSON.parse(Cookies.get('USER_PEDIDO_ENDERECO'));
+    const usuario = JSON.parse(Cookies.get('USER_TOKEN'));
+    const { produtos } = JSON.parse(Cookies.get('USER_PEDIDO'));
+    const itens = [];
+
+    for (const prop in produtos) {
+      itens.push({
+        quantity: produtos[prop].qtd,
+        product: {
+          id: produtos[prop].id,
+        },
+      });
+    }
+
+    const pedido = {
+      user: {
+        email: usuario.email,
+      },
+      address: endereco.endereco.endereco,
+      latitude: endereco.endereco.lat,
+      longitude: endereco.endereco.lng,
+      itens,
+    };
+
+    fetch('https://don-delivery.herokuapp.com/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${usuario.token}`,
+      },
+      body: JSON.stringify(pedido),
+    })
+      .then(async (respostaDoServer) => {
+        const dadosDaResposta = await respostaDoServer.json();
+        router.push(`/order/${dadosDaResposta.id}`);
+      });
+  };
+
   return (
     <>
       <Container>
@@ -198,10 +241,8 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
           </Grid.Col>
         </Grid.Row>
         <ButtonClose>
-          <Button>
-            <Link href="/order" passHref>
-              <a href="/order" style={{ color: '#fff' }}>Finalizar compra</a>
-            </Link>
+          <Button onClick={handleClick}>
+            Finalizar compra
           </Button>
         </ButtonClose>
       </Container>

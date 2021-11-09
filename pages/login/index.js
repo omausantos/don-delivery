@@ -105,7 +105,11 @@ function Container() {
 
                     if (dadosDaResposta.token) {
                       const { token } = dadosDaResposta;
-                      nookies.set(null, 'USER_TOKEN', token, {
+                      const dados = {
+                        token,
+                        email: userInfo.email,
+                      };
+                      nookies.set(null, 'USER_TOKEN', JSON.stringify(dados), {
                         path: '/',
                         maxAge: 86400 * 7,
                       });
