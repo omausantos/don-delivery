@@ -222,12 +222,12 @@ const ButtonClose = styled.div`
 `;
 
 function ProdutoHtml({ info, alterarQuantidade, infoProdutoPedido }) {
-  const [valor, setValor] = React.useState(info.price * infoProdutoPedido.qtd);
+  const [valor, setValor] = React.useState(info.preco * infoProdutoPedido.qtd);
 
   const handleChange = (event) => {
-    const valorProduto = info.price * event.target.value;
+    const valorProduto = info.preco * event.target.value;
     setValor(valorProduto);
-    alterarQuantidade(infoProdutoPedido.id, parseInt(event.target.value), info.price);
+    alterarQuantidade(infoProdutoPedido.id, parseInt(event.target.value), info.preco);
   };
 
   const selectedOption = (option, value) => {
@@ -243,10 +243,10 @@ function ProdutoHtml({ info, alterarQuantidade, infoProdutoPedido }) {
     <>
       <div>
         <div className="img">
-          <img src={info.imageUri} alt={info.name} />
+          <img src={info.imagemUri} alt={info.nome} />
         </div>
         <div>
-          {info.name}
+          {info.nome}
           <br />
           Quantidade:
           {' '}
@@ -405,7 +405,14 @@ export async function getServerSideProps(context) {
   const cookies = nookies.get(context);
   const listaProdutosPedido = JSON.parse(cookies.USER_PEDIDO);
 
-  const listaProdutos = await fetch('https://don-delivery.herokuapp.com/products').then(async (res) => {
+  const token = JSON.parse(cookies.USER_TOKEN);
+
+  const listaProdutos = await fetch('https://don-delivery.herokuapp.com/produtos', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token.token}`,
+    },
+  }).then(async (res) => {
     const response = await res.json();
     return response;
   });

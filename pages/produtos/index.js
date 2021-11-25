@@ -159,15 +159,15 @@ export default function Produtos({ produtos }) {
               {produtos.map((produto) => (
                 <li key={produto.id}>
                   <div>
-                    <img src={produto.imageUri} alt={produto.name} />
+                    <img src={produto.imagemUri} alt={produto.nome} />
                   </div>
-                  <h3>{produto.name}</h3>
-                  <p>{produto.description}</p>
-                  <button onClick={() => incluirPedido(produto.id, produto.price)}>
+                  <h3>{produto.nome}</h3>
+                  <p>{produto.descricao}</p>
+                  <button onClick={() => incluirPedido(produto.id, produto.preco)}>
                     Adicionar
                     {' '}
                     <FormatarValorReal
-                      value={produto.price}
+                      value={produto.preco}
                     />
                   </button>
                 </li>
@@ -186,8 +186,16 @@ export default function Produtos({ produtos }) {
   );
 }
 
-export async function getStaticProps() {
-  const produtos = await fetch('https://don-delivery.herokuapp.com/products').then(async (res) => {
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context);
+  const token = JSON.parse(cookies.USER_TOKEN);
+
+  const produtos = await fetch('https://don-delivery.herokuapp.com/produtos', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token.token}`,
+    },
+  }).then(async (res) => {
     const response = await res.json();
     return response;
   });

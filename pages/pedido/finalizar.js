@@ -100,7 +100,7 @@ function ProdutoList({ info, infoProdutoPedido }) {
     <>
       {infoProdutoPedido.qtd}
       {' '}
-      {info.name}
+      {info.nome}
       {' '}
       <br />
     </>
@@ -293,7 +293,14 @@ export async function getServerSideProps(context) {
   const cookies = nookies.get(context);
   const listaProdutosPedido = JSON.parse(cookies.USER_PEDIDO);
 
-  const listaProdutos = await fetch('https://don-delivery.herokuapp.com/products').then(async (res) => {
+  const token = JSON.parse(cookies.USER_TOKEN);
+
+  const listaProdutos = await fetch('https://don-delivery.herokuapp.com/produtos', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token.token}`,
+    },
+  }).then(async (res) => {
     const response = await res.json();
     return response;
   });
