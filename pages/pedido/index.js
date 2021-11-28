@@ -291,6 +291,11 @@ function Produtos({ listaProdutos, listaProdutosPedido }) {
 
   const [valor, setValor] = React.useState(valorTotal(listaProdutosPedido));
 
+  nookies.set(null, 'USER_PEDIDO', JSON.stringify({ produtos: listaProdutosPedido, valorTotal: valor }), {
+    path: '/',
+    maxAge: 86400 * 7,
+  });
+
   const alterarQuantidade = (item, qtd, price) => {
     let produto;
     if (qtd > 0) {
@@ -302,7 +307,7 @@ function Produtos({ listaProdutos, listaProdutosPedido }) {
 
     setListaProdutosPedidoFinal(produto);
     setValor(valorTotal(listaProdutosPedidoFinal));
-    nookies.set(null, 'USER_PEDIDO', JSON.stringify({ produtos: produto }), {
+    nookies.set(null, 'USER_PEDIDO', JSON.stringify({ produtos: produto, valorTotal: valor }), {
       path: '/',
       maxAge: 86400 * 7,
     });
