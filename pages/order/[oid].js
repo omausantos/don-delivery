@@ -1,10 +1,11 @@
 import React from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle, css } from 'styled-components';
 import nookies from 'nookies';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
 import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
+import breakpointsMedia from '../../src/theme/utils/breakpointsMedia';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -46,7 +47,25 @@ const Container = styled.div`
         li {
             list-style: disc;
             margin-bottom: 4px;
-        } 
+            ${breakpointsMedia({
+    xs: css`
+              list-style-type: none;
+                        `,
+    md: css`
+              list-style-type: disc;
+                    `,
+  })};
+        }
+        ${breakpointsMedia({
+    xs: css`
+                  max-width: 80%;
+                  text-align: center;
+              `,
+    md: css`
+              max-width: 50%;
+              text-align: left;
+          `,
+  })};
     }
      
 `;
@@ -63,7 +82,7 @@ const Informacoes = styled.div`
 `;
 
 function InfoContainer({ pedido }) {
-  console.log("pedido1", pedido);
+  console.log('pedido1', pedido);
 
   const findProductById = (id) => {
     const item = pedido.listaProdutos.find((element) => element.id === id);
