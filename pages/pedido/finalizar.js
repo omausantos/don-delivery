@@ -131,6 +131,7 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
     const endereco = JSON.parse(Cookies.get('USER_PEDIDO_ENDERECO'));
     const usuario = JSON.parse(Cookies.get('USER_TOKEN'));
     const { produtos } = JSON.parse(Cookies.get('USER_PEDIDO'));
+    const { observacao } = JSON.parse(Cookies.get('USER_PEDIDO_OBS'));
     const itens = [];
 
     for (const prop in produtos) {
@@ -147,12 +148,14 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
         email: usuario.email,
       },
       address: endereco.endereco.endereco,
+      endereco: endereco.endereco.endereco,
       latitude: endereco.endereco.lat,
       longitude: endereco.endereco.lng,
-      itens,
+      descricao: observacao,
+      productOrders: itens,
     };
 
-    fetch('https://don-delivery.herokuapp.com/orders', {
+    fetch('https://don-delivery.herokuapp.com/pedidos', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
