@@ -1,8 +1,10 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
+import nookies from 'nookies';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
+import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -60,7 +62,14 @@ const Informacoes = styled.div`
     padding: 4px;
 `;
 
-function InfoContainer() {
+function InfoContainer({ pedido }) {
+  console.log("pedido1", pedido);
+
+  const findProductById = (id) => {
+    const item = pedido.listaProdutos.find((element) => element.id === id);
+    return item;
+  };
+
   return (
     <Container>
       <h2>
@@ -69,15 +78,17 @@ function InfoContainer() {
         Itens do pedido
       </h2>
       <ul>
-        <li>
-          1 Pizza Mussarela
-        </li>
-        <li>
-          1 Pizza Calabresa
-        </li>
-        <li>
-          2 Coca-Cola 2L
-        </li>
+        {Object.keys(pedido.produtos).map((item) => (
+          <li key={item}>
+            {pedido.produtos[item].qtd}
+            {' '}
+            {findProductById(pedido.produtos[item].id).nome}
+            {' '}
+            <FormatarValorReal
+              value={pedido.produtos[item].price}
+            />
+          </li>
+        ))}
       </ul>
       <h2>
         <img src="/images/order/endereco.png" alt="Endereço para entrega" />
@@ -86,7 +97,7 @@ function InfoContainer() {
       </h2>
       <ul>
         <li>
-          Rua Paes de Barros, 502
+          {pedido.endereco}
         </li>
       </ul>
       <h2>
@@ -96,19 +107,23 @@ function InfoContainer() {
       </h2>
       <ul>
         <li>
-          Cartão de crédito
+          {pedido.pagamento}
         </li>
       </ul>
       <Informacoes style={{ maxWidth: '150px' }}>
         Total a ser pago:
         <br />
-        <strong>R$ 130,70</strong>
+        <strong>
+          <FormatarValorReal
+            value={pedido.valor}
+          />
+        </strong>
       </Informacoes>
     </Container>
   );
 }
 
-function OrderPageInfo() {
+function OrderPageInfo({ pedido }) {
   return (
     <>
       <Grid.Container>
@@ -131,7 +146,7 @@ function OrderPageInfo() {
               <img src="/images/pedido/icone.png" alt="Veja seu pedido" />
               <h1>Detalhes do seu pedido</h1>
             </HeaderContainer>
-            <InfoContainer />
+            <InfoContainer pedido={pedido} />
           </Grid.Col>
         </Grid.Row>
       </Grid.Container>
@@ -139,13 +154,51 @@ function OrderPageInfo() {
   );
 }
 
-export default function OrderPage() {
+export default function OrderPage({ ...props }) {
+  const pedido = {
+    ...props,
+  };
   return (
     <>
       <GlobalStyle />
       <Header />
-      <OrderPageInfo />
+      <OrderPageInfo pedido={pedido} />
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context);
+  const endereco = JSON.parse(cookies.USER_PEDIDO_ENDERECO);
+  const pedido = JSON.parse(cookies.USER_PEDIDO);
+  const pagamentoNumber = JSON.parse(cookies.USER_PEDIDO_PAGAMENTO);
+  let pagamento = 'Cartão de crédito';
+
+  if (pagamentoNumber === 2) {
+    pagamento = 'PIX';
+  } else if (pagamentoNumber === 3) {
+    pagamento = 'Dinheiro';
+  }
+
+  const token = JSON.parse(cookies.USER_TOKEN);
+  const listaProdutos = await fetch('https://don-delivery.herokuapp.com/produtos', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token.token}`,
+    },
+  }).then(async (res) => {
+    const response = await res.json();
+    return response;
+  });
+
+  return {
+    props: {
+      endereco: endereco.endereco.endereco,
+      pagamento,
+      produtos: pedido.produtos,
+      valor: pedido.valorTotal,
+      listaProdutos,
+    },
+  };
 }
