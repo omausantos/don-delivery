@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled, { createGlobalStyle, css } from 'styled-components';
 import nookies from 'nookies';
@@ -82,8 +83,6 @@ const Informacoes = styled.div`
 `;
 
 function InfoContainer({ pedido }) {
-  console.log('pedido1', pedido);
-
   const findProductById = (id) => {
     const item = pedido.listaProdutos.find((element) => element.id === id);
     return item;
