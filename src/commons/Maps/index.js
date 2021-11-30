@@ -1,7 +1,7 @@
 import React from 'react';
 import GoogleMapReact from 'google-map-react';
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+const AnyReactComponent = ({ text }) => <div><img src="/pizza.png" /></div>;
 
 export default function SimpleMap(props) {
   const info = {
@@ -16,7 +16,7 @@ export default function SimpleMap(props) {
     <div style={{ height: '30vh', width: '100%' }}>
       <GoogleMapReact
         bootstrapURLKeys={{ key: 'AIzaSyBev6RyZJDJZXWKE-z6hquJRpRD66NfCqU' }}
-        defaultCenter={info.center}
+        center={info.center}
         defaultZoom={15}
       >
         <AnyReactComponent
