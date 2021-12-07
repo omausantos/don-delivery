@@ -252,7 +252,7 @@ export async function getServerSideProps(context) {
     return response;
   });
 
-  const ultimoPedido = pedidos.content.filter((pedido) => pedido.user.email.includes('teste@tcc.com'));
+  const ultimoPedido = pedidos.content.filter((pedido) => pedido.user.email.includes(token.email));
 
   // Falar sobre tamanho da página aqui e tomar cuidado com recursos extras que vão pra página
   return {
