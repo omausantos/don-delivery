@@ -138,6 +138,16 @@ function UltimoPedido({ ultimoPedido }) {
   );
 }
 
+const DivBtn = styled.div`
+height: 0;
+    z-index: 9999;
+    text-align: right;
+    position: relative;
+  a {
+    margin-top: 14px !important;
+  }
+`;
+
 // eslint-disable-next-line react/prop-types
 export default function Produtos({ produtos, ultimoPedido }) {
   const [quantidades, setQuantidades] = React.useState(0);
@@ -176,6 +186,9 @@ export default function Produtos({ produtos, ultimoPedido }) {
             }}
           >
             <UltimoPedido ultimoPedido={ultimoPedido} />
+            <DivBtn>
+              <ButtonLogout />
+            </DivBtn>
             <HeaderContainer>
               <div style={{
                 padding: '10px',
@@ -194,7 +207,7 @@ export default function Produtos({ produtos, ultimoPedido }) {
                   </span>
                 </p>
               </div>
-              <ButtonLogout />
+              <div />
             </HeaderContainer>
             <ListaProdutos>
               {produtos.map((produto) => (
@@ -253,11 +266,10 @@ export async function getServerSideProps(context) {
 
   const ultimoPedido = pedidos.content.filter((pedido) => pedido.user.email.includes(token.email));
 
-  // Falar sobre tamanho da página aqui e tomar cuidado com recursos extras que vão pra página
   return {
     props: {
       produtos,
-      ultimoPedido: ultimoPedido[0],
+      ultimoPedido: ultimoPedido > [] ? ultimoPedido[0] : null,
     },
   };
 }
