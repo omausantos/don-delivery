@@ -228,7 +228,7 @@ const Paginacao = styled.ul`
 
 function ListaPaginacao({ paginacao }) {
   const myArray = [];
-  for (let i = 1; i <= paginacao; i++) {
+  for (let i = 1; i <= paginacao; i + 1) {
     myArray.push(i);
   }
   const listItems = myArray.map((number) => (
