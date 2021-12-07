@@ -8,6 +8,7 @@ import Header from '../../src/commons/Header';
 import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
 import breakpointsMedia from '../../src/theme/utils/breakpointsMedia';
 import metodoPagamento from '../../src/theme/metodoPagamento';
+import statusPedido from '../../src/theme/statusPedido';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -87,6 +88,16 @@ function InfoContainer({ pedido }) {
   return (
     <Container>
       <h2>
+        <img src="/images/order/pagamento.png" alt="Forma de pagamento" />
+        {' '}
+        Status
+      </h2>
+      <ul>
+        <li>
+          {statusPedido[pedido.status].nome}
+        </li>
+      </ul>
+      <h2>
         <img src="/images/order/produtos.png" alt="Itens do pedido" />
         {' '}
         Itens do pedido
@@ -122,6 +133,16 @@ function InfoContainer({ pedido }) {
       <ul>
         <li>
           {metodoPagamento[pedido.paymentStatus].nome}
+        </li>
+      </ul>
+      <h2>
+        <img src="/images/order/pagamento.png" alt="Forma de pagamento" />
+        {' '}
+        Observação
+      </h2>
+      <ul>
+        <li>
+          {pedido.descricao}
         </li>
       </ul>
       <Informacoes style={{ maxWidth: '150px' }}>
