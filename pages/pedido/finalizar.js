@@ -175,11 +175,19 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
       .then(async (respostaDoServer) => {
         const dadosDaResposta = await respostaDoServer.json();
         setMetodoPagemento(usuario.token, dadosDaResposta.id, pagamentoId);
-        Cookies.remove('USER_PEDIDO_ENDERECO');
-        Cookies.remove('USER_PEDIDO');
-        Cookies.remove('USER_PEDIDO_OBS');
-        Cookies.remove('USER_PEDIDO_PAGAMENTO');
-        router.push(`/order/${dadosDaResposta.id}`);
+
+        fetch(`https://don-delivery.herokuapp.com/pedidos/${dadosDaResposta.id}/pagamento/${pagamentoId}`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${usuario.token}`,
+          },
+        }).then(async () => {
+          Cookies.remove('USER_PEDIDO_ENDERECO');
+          Cookies.remove('USER_PEDIDO');
+          Cookies.remove('USER_PEDIDO_OBS');
+          Cookies.remove('USER_PEDIDO_PAGAMENTO');
+          router.push(`/order/${dadosDaResposta.id}`);
+        });
       });
   };
 
