@@ -168,6 +168,7 @@ function Container() {
                   </Label>
                   <TextInput
                     placeholder="(99) 99999-9999"
+                    mask="(99) 99999-9999"
                     icone="/images/phone.jpg"
                     name="telephone"
                     value={userInfo.telephone}
