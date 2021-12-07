@@ -165,10 +165,6 @@ function Container() {
                 onChange={handleChange}
               />
               {errors.password && <MensagemErro>{errors.password}</MensagemErro>}
-
-              <Link href="/login" passHref>
-                <a href="/login">Esqueceu sua senha?</a>
-              </Link>
               <Button>
                 Acessar
               </Button>
