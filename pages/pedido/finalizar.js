@@ -107,6 +107,15 @@ function ProdutoList({ info, infoProdutoPedido }) {
   );
 }
 
+function setMetodoPagemento(token, pedidoId, pagamentoId) {
+  fetch(`https://don-delivery.herokuapp.com/pedidos/${pedidoId}/pagamento/${pagamentoId}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
   const findProductById = (id) => {
     const item = listaProdutos.find((element) => element.id === id);
@@ -132,12 +141,13 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
     const usuario = JSON.parse(Cookies.get('USER_TOKEN'));
     const { produtos } = JSON.parse(Cookies.get('USER_PEDIDO'));
     const { observacao } = JSON.parse(Cookies.get('USER_PEDIDO_OBS'));
+    const pagamentoId = JSON.parse(Cookies.get('USER_PEDIDO_PAGAMENTO'));
     const itens = [];
 
     for (const prop in produtos) {
       itens.push({
-        quantity: produtos[prop].qtd,
-        product: {
+        quantidade: produtos[prop].qtd,
+        produto: {
           id: produtos[prop].id,
         },
       });
@@ -147,12 +157,11 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
       user: {
         email: usuario.email,
       },
-      address: endereco.endereco.endereco,
       endereco: endereco.endereco.endereco,
       latitude: endereco.endereco.lat,
       longitude: endereco.endereco.lng,
       descricao: observacao,
-      productOrders: itens,
+      itens,
     };
 
     fetch('https://don-delivery.herokuapp.com/pedidos', {
@@ -165,6 +174,11 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
     })
       .then(async (respostaDoServer) => {
         const dadosDaResposta = await respostaDoServer.json();
+        setMetodoPagemento(usuario.token, dadosDaResposta.id, pagamentoId);
+        Cookies.remove('USER_PEDIDO_ENDERECO');
+        Cookies.remove('USER_PEDIDO');
+        Cookies.remove('USER_PEDIDO_OBS');
+        Cookies.remove('USER_PEDIDO_PAGAMENTO');
         router.push(`/order/${dadosDaResposta.id}`);
       });
   };
