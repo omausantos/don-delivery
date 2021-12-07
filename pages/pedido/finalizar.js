@@ -192,7 +192,7 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
                 <input type="radio" value="2" name="pagamento" id="pagamento-cartao-debito" onChange={handleChange} />
                 <img src="/images/pedido/debito.png" alt="Pagamento por cartão de débito" />
                 <Label
-                  for="pagamento-debito"
+                  for="pagamento-cartao-debito"
                 >
                   Cartão de débito
                 </Label>
@@ -201,7 +201,7 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
                 <input type="radio" value="4" name="pagamento" id="pagamento-cartao-alimentacao" onChange={handleChange} />
                 <img src="/images/pedido/vale.png" alt="Pagamento por cartão de alimentação" />
                 <Label
-                  for="pagamento-alimentacao"
+                  for="pagamento-cartao-alimentacao"
                 >
                   Vale Refeição/Alimentação
                 </Label>

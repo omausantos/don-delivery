@@ -124,7 +124,7 @@ function Pedido({ info }) {
 
   const metodoPagamento = {
     PENDING: {
-      nome: 'DINHEIRO',
+      nome: 'PENDENTE',
       id: 1,
     },
     DEBIT: {
@@ -146,6 +146,10 @@ function Pedido({ info }) {
     WHATSAPP: {
       nome: 'WHATSAPP',
       id: 6,
+    },
+    MONEY: {
+      nome: 'DINHEIRO',
+      id: 8,
     },
   };
 
