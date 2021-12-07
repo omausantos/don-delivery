@@ -2,6 +2,7 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import Link from 'next/link';
+import nookies from 'nookies';
 import Footer from '../src/commons/Footer';
 import Grid from '../src/commons/Grid';
 import Header from '../src/commons/Header';
@@ -99,4 +100,22 @@ export default function Home() {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context);
+  const token = !!cookies.USER_TOKEN;
+
+  if (token) {
+    return {
+      redirect: {
+        destination: '/produtos',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 }

@@ -194,3 +194,21 @@ export default function Login() {
     </>
   );
 }
+
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context);
+  const token = !!cookies.USER_TOKEN;
+
+  if (token) {
+    return {
+      redirect: {
+        destination: '/produtos',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}
