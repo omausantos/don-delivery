@@ -2,6 +2,7 @@
 import React from 'react';
 import styled, { createGlobalStyle, css } from 'styled-components';
 import nookies from 'nookies';
+import Link from 'next/link';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
@@ -208,7 +209,44 @@ function Pedido({ info }) {
   );
 }
 
-export default function Pedidos({ listaPedidos }) {
+const Paginacao = styled.ul`
+  display: flex;
+  justify-content: center;
+  li {
+    padding-bottom: 8px;
+    a {
+      display: block;
+      padding: 4px 8px;
+      background-color: green;
+      margin: 0 8px;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+    }
+  }
+`;
+
+function ListaPaginacao({ paginacao }) {
+  const myArray = [];
+  for (let i = 1; i <= paginacao; i++) {
+    myArray.push(i);
+  }
+  const listItems = myArray.map((number) => (
+    <li>
+      <Link href={`/pedidos/${number}`} passHref>
+        <a href={`/pedidos/${number}`}>{number}</a>
+      </Link>
+    </li>
+  ));
+
+  return (
+    <Paginacao>
+      {listItems}
+    </Paginacao>
+  );
+}
+
+export default function Pedidos({ listaPedidos, paginacao }) {
   return (
     <>
       <GlobalStyle />
@@ -231,11 +269,12 @@ export default function Pedidos({ listaPedidos }) {
           >
             <HeaderContainer>
               <img src="/images/pedido/icone.png" alt="Veja seu pedido" />
-              <h1>Gestão de pedidos</h1>
+              <h1>Gestão de pedidos </h1>
             </HeaderContainer>
             <Container>
               {listaPedidos.map((pedido) => <Pedido info={pedido} key={pedido.id} />)}
             </Container>
+            <ListaPaginacao paginacao={paginacao} />
           </Grid.Col>
         </Grid.Row>
       </Grid.Container>
@@ -248,7 +287,8 @@ export async function getServerSideProps(context) {
   const cookies = nookies.get(context);
   const token = JSON.parse(cookies.USER_TOKEN);
 
-  const { content } = await fetch('https://don-delivery.herokuapp.com/pedidos', {
+  const { oid } = context.query;
+  const retorno = await fetch(`https://don-delivery.herokuapp.com/pedidos?page=${oid - 1}&linesPerPage=6&direction=DESC&orderBy=id`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token.token}`,
@@ -260,7 +300,8 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      listaPedidos: content,
+      listaPedidos: retorno.content,
+      paginacao: retorno.totalPages,
     },
   };
 }

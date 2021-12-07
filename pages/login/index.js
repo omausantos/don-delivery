@@ -113,7 +113,12 @@ function Container() {
                         path: '/',
                         maxAge: 86400 * 7,
                       });
-                      router.push('/produtos');
+
+                      if (userInfo.email === 'contato@doncorleone.com.br') {
+                        router.push('/pedidos/1');
+                      } else {
+                        router.push('/produtos');
+                      }
                     } else {
                       setErrors({ acessonegado: 'Dados de Acesso inválidos' });
                     }
