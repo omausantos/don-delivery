@@ -1,9 +1,11 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import styled, { createGlobalStyle, css } from 'styled-components';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
 import breakpointsMedia from '../../src/theme/utils/breakpointsMedia';
+import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -99,17 +101,97 @@ const Container = styled.ul`
     }
 `;
 
-function Pedido() {
+
+
+function Pedido({ info }) {
+
+  const statusPedidos = {
+    PENDING: {
+      nome: 'PENDENTE',
+      id: 1,
+    },
+    EN_ROUTE: {
+      nome: 'EM PREPARAÇÃO',
+      id: 2,
+    },
+    DELIVRED: {
+      nome: 'EMTREGUE',
+      id: 3,
+    },
+    CANCELED: {
+      nome: 'CANCELADO',
+      id: 4,
+    },
+  };
+
+  const metodoPagamento = {
+    PENDING: {
+      nome: 'DINHEIRO',
+      id: 1,
+    },
+    DEBIT: {
+      nome: 'DÉBITO',
+      id: 2,
+    },
+    CREDIT: {
+      nome: 'CRÉDITO',
+      id: 3,
+    },
+    FOOD_CARD: {
+      nome: 'CARTÃO ALIMENTAÇÃO',
+      id: 4,
+    },
+    PIX: {
+      nome: 'PIX',
+      id: 5,
+    },
+    WHATSAPP: {
+      nome: 'WHATSAPP',
+      id: 6,
+    },
+  };
+
+  const [selectDefault, setSelectDefault] = React.useState(statusPedidos[info.status].id);
+
+  function handleChange(event) {
+    setSelectDefault(event.target.value);
+    fetch(`https://don-delivery.herokuapp.com/pedidos/${info.id}/status/${event.target.value}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBUEkgZWNvbW1lcmNlIGJvb3RjYW1wIiwic3ViIjoiMSIsImlhdCI6MTYzODg0MTc4NiwiZXhwIjoxNjM4OTQxNzkzfQ.U_Va-mUlXZLUipDwOxUv_GDXbT3PX38Ouow7j3UzEd0',
+      },
+    });
+  }
+
   return (
-    <li>
+    <li key={info.id}>
       <header>
         <div className="header">
-          <span>Pedido Nº 1</span>
-          <span className="value">Total: R$ 159,90</span>
+          <span>
+            Pedido Nº
+            {' '}
+            {info.id}
+          </span>
+          <span className="value">
+            Total:
+            {' '}
+            <FormatarValorReal
+              value={info.valorTotal}
+            />
+
+          </span>
         </div>
         <div>
-          <span>Realizado há 20 min.</span>
-          <span>Pagamento: Vale Refeição</span>
+          <span>
+            Realizado às
+            {' '}
+            {info.instante}
+          </span>
+          <span>
+            Pagamento:
+            {' '}
+            {metodoPagamento[info.paymentStatus].nome}
+          </span>
         </div>
       </header>
       <aside>
@@ -117,53 +199,51 @@ function Pedido() {
           <p>
             <strong>Cliente:</strong>
             {' '}
-            Carlos Eduardo
+            {info.user.firstName}
+            {' '}
+            {info.user.lastName}
             <br />
             <strong>Telefone:</strong>
             {' '}
-            (11) 9XXXX-XXXX
+            {info.user.telephone}
             <br />
             <strong>Endereço:</strong>
             {' '}
-            Rua Francisco José da Costa, 45 - Casa 02
+            {info.endereco}
           </p>
         </div>
         <div className="select">
           <p>
-            <strong>02</strong>
-            {' '}
-            Pizza Calabresa
-            <br />
-            <strong>01</strong>
-            {' '}
-            Pizza Mussarela
-            <br />
-            <strong>01</strong>
-            {' '}
-            Coca-cola
-            <br />
+            {info.itens.map((item) => (
+              <>
+                <strong>{item.quantidade}</strong>
+                {' '}
+                {item.produto.nome}
+                <br />
+              </>
+            ))}
           </p>
           <hr />
           <p>
             <strong>Observações:</strong>
             {' '}
-            usar cebola roxa
+            {info.descricao}
           </p>
           <hr />
           <p>
             <strong>status:</strong>
             {' '}
-            <select>
-              <option>
+            <select value={selectDefault} onChange={handleChange}>
+              <option value="1">
                 Pendente
               </option>
-              <option>
+              <option value="2">
                 Em preparação
               </option>
-              <option>
+              <option value="3">
                 Entregue
               </option>
-              <option>
+              <option value="4">
                 Cancelado
               </option>
             </select>
@@ -174,7 +254,7 @@ function Pedido() {
   );
 }
 
-export default function Pedidos() {
+export default function Pedidos({ listaPedidos }) {
   return (
     <>
       <GlobalStyle />
@@ -200,10 +280,7 @@ export default function Pedidos() {
               <h1>Gestão de pedidos</h1>
             </HeaderContainer>
             <Container>
-              <Pedido />
-              <Pedido />
-              <Pedido />
-              <Pedido />
+              {listaPedidos.map((pedido) => <Pedido info={pedido} key={pedido.id} />)}
             </Container>
           </Grid.Col>
         </Grid.Row>
@@ -214,7 +291,19 @@ export default function Pedidos() {
 }
 
 export async function getServerSideProps() {
+  const { content } = await fetch('https://don-delivery.herokuapp.com/pedidos', {
+    method: 'GET',
+    headers: {
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBUEkgZWNvbW1lcmNlIGJvb3RjYW1wIiwic3ViIjoiMSIsImlhdCI6MTYzODg0MTc4NiwiZXhwIjoxNjM4OTQxNzkzfQ.U_Va-mUlXZLUipDwOxUv_GDXbT3PX38Ouow7j3UzEd0',
+    },
+  }).then(async (res) => {
+    const response = await res.json();
+    return response;
+  });
+
   return {
-    props: {},
+    props: {
+      listaPedidos: content,
+    },
   };
 }
