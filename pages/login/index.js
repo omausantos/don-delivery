@@ -111,7 +111,6 @@ function Container() {
                       };
                       nookies.set(null, 'USER_TOKEN', JSON.stringify(dados), {
                         path: '/',
-                        maxAge: 86400 * 7,
                       });
 
                       if (userInfo.email === 'contato@doncorleone.com.br') {

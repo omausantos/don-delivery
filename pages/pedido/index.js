@@ -97,7 +97,6 @@ function Endereco() {
     };
     nookies.set(null, 'USER_PEDIDO_ENDERECO', JSON.stringify({ endereco }), {
       path: '/',
-      maxAge: 86400 * 7,
     });
   };
 
@@ -294,7 +293,6 @@ function Produtos({ listaProdutos, listaProdutosPedido }) {
 
   nookies.set(null, 'USER_PEDIDO', JSON.stringify({ produtos: listaProdutosPedido, valorTotal: valor }), {
     path: '/',
-    maxAge: 86400 * 7,
   });
 
   const alterarQuantidade = (item, qtd, price) => {
@@ -310,7 +308,6 @@ function Produtos({ listaProdutos, listaProdutosPedido }) {
     setValor(valorTotal(listaProdutosPedidoFinal));
     nookies.set(null, 'USER_PEDIDO', JSON.stringify({ produtos: produto, valorTotal: valor }), {
       path: '/',
-      maxAge: 86400 * 7,
     });
   };
 
@@ -349,7 +346,6 @@ const TextInputBorder = styled(TextInput)`
 function handleChangeobs(event) {
   nookies.set(null, 'USER_PEDIDO_OBS', JSON.stringify({ observacao: event.target.value }), {
     path: '/',
-    maxAge: 86400 * 7,
   });
 }
 

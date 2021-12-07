@@ -152,7 +152,6 @@ export default function Produtos({ produtos, ultimoPedido }) {
 
     nookies.set(null, 'USER_PEDIDO', JSON.stringify(pedido), {
       path: '/',
-      maxAge: 86400 * 7,
     });
   }
 
