@@ -7,6 +7,8 @@ import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
 import breakpointsMedia from '../../src/theme/utils/breakpointsMedia';
 import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
+import metodoPagamento from '../../src/theme/metodoPagamento';
+import statusPedido from '../../src/theme/statusPedido';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -103,57 +105,7 @@ const Container = styled.ul`
 `;
 
 function Pedido({ info }) {
-  const statusPedidos = {
-    PENDING: {
-      nome: 'PENDENTE',
-      id: 1,
-    },
-    EN_ROUTE: {
-      nome: 'EM PREPARAÇÃO',
-      id: 2,
-    },
-    DELIVRED: {
-      nome: 'EMTREGUE',
-      id: 3,
-    },
-    CANCELED: {
-      nome: 'CANCELADO',
-      id: 4,
-    },
-  };
-
-  const metodoPagamento = {
-    PENDING: {
-      nome: 'PENDENTE',
-      id: 1,
-    },
-    DEBIT: {
-      nome: 'DÉBITO',
-      id: 2,
-    },
-    CREDIT: {
-      nome: 'CRÉDITO',
-      id: 3,
-    },
-    FOOD_CARD: {
-      nome: 'CARTÃO ALIMENTAÇÃO',
-      id: 4,
-    },
-    PIX: {
-      nome: 'PIX',
-      id: 5,
-    },
-    WHATSAPP: {
-      nome: 'WHATSAPP',
-      id: 6,
-    },
-    MONEY: {
-      nome: 'DINHEIRO',
-      id: 8,
-    },
-  };
-
-  const [selectDefault, setSelectDefault] = React.useState(statusPedidos[info.status].id);
+  const [selectDefault, setSelectDefault] = React.useState(statusPedido[info.status].id);
 
   function handleChange(event) {
     setSelectDefault(event.target.value);
