@@ -175,21 +175,39 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
         <h2 style={{ textAlign: 'center' }}>Formas de pagamento</h2>
         <Grid.Row>
           <Grid.Col
-            offset={{ xs: 0, md: 4 }}
-            col={{ xs: 12, md: 4 }}
+            offset={{ xs: 0, md: 3 }}
+            col={{ xs: 12, md: 6 }}
           >
             <ListaPagamentos>
               <li>
-                <input type="radio" value="1" name="pagamento" id="pagamento-cartao" onChange={handleChange} />
+                <input type="radio" value="3" name="pagamento" id="pagamento-cartao-credito" onChange={handleChange} />
                 <img src="/images/pedido/cartao.png" alt="Pagamento por cartão de crédito" />
                 <Label
-                  for="pagamento-cartao"
+                  for="pagamento-cartao-credito"
                 >
                   Cartão de crédito
                 </Label>
               </li>
               <li>
-                <input type="radio" value="2" name="pagamento" id="pagamento-pix" onChange={handleChange} />
+                <input type="radio" value="2" name="pagamento" id="pagamento-cartao-debito" onChange={handleChange} />
+                <img src="/images/pedido/debito.png" alt="Pagamento por cartão de débito" />
+                <Label
+                  for="pagamento-debito"
+                >
+                  Cartão de débito
+                </Label>
+              </li>
+              <li>
+                <input type="radio" value="4" name="pagamento" id="pagamento-cartao-alimentacao" onChange={handleChange} />
+                <img src="/images/pedido/vale.png" alt="Pagamento por cartão de alimentação" />
+                <Label
+                  for="pagamento-alimentacao"
+                >
+                  Vale Refeição/Alimentação
+                </Label>
+              </li>
+              <li>
+                <input type="radio" value="5" name="pagamento" id="pagamento-pix" onChange={handleChange} />
                 <img src="/images/pedido/pix.png" alt="Pagamento por PIX" />
                 <Label
                   for="pagamento-pix"
@@ -198,7 +216,7 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
                 </Label>
               </li>
               <li>
-                <input type="radio" value="3" name="pagamento" id="pagamento-dinheiro" onChange={handleChange} />
+                <input type="radio" value="8" name="pagamento" id="pagamento-dinheiro" onChange={handleChange} />
                 <img src="/images/pedido/dinheiro.png" alt="Pagamento por Dinheiro" />
                 <Label
                   for="pagamento-dinheiro"
