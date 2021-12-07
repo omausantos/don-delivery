@@ -140,7 +140,7 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
     const endereco = JSON.parse(Cookies.get('USER_PEDIDO_ENDERECO'));
     const usuario = JSON.parse(Cookies.get('USER_TOKEN'));
     const { produtos } = JSON.parse(Cookies.get('USER_PEDIDO'));
-    const { observacao } = JSON.parse(Cookies.get('USER_PEDIDO_OBS'));
+    const { observacao } = Cookies.get('USER_PEDIDO_OBS') ? JSON.parse(Cookies.get('USER_PEDIDO_OBS')) : { observacao: '' };
     const pagamentoId = JSON.parse(Cookies.get('USER_PEDIDO_PAGAMENTO'));
     const itens = [];
 
