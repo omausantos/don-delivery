@@ -7,6 +7,9 @@ import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
 import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
 import breakpointsMedia from '../../src/theme/utils/breakpointsMedia';
+import metodoPagamento from '../../src/theme/metodoPagamento';
+import statusPedido from '../../src/theme/statusPedido';
+import ButtonLogout from '../../src/commons/ButtonLogout';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -83,27 +86,32 @@ const Informacoes = styled.div`
 `;
 
 function InfoContainer({ pedido }) {
-  const findProductById = (id) => {
-    const item = pedido.listaProdutos.find((element) => element.id === id);
-    return item;
-  };
-
   return (
     <Container>
+      <h2>
+        <img src="/images/order/pagamento.png" alt="Forma de pagamento" />
+        {' '}
+        Status
+      </h2>
+      <ul>
+        <li>
+          {statusPedido[pedido.status].nome}
+        </li>
+      </ul>
       <h2>
         <img src="/images/order/produtos.png" alt="Itens do pedido" />
         {' '}
         Itens do pedido
       </h2>
       <ul>
-        {Object.keys(pedido.produtos).map((item) => (
-          <li key={item}>
-            {pedido.produtos[item].qtd}
+        {pedido.itens.map((item) => (
+          <li key={item.produto.id}>
+            {item.quantidade}
             {' '}
-            {findProductById(pedido.produtos[item].id).nome}
+            {item.produto.nome}
             {' '}
             <FormatarValorReal
-              value={pedido.produtos[item].price}
+              value={item.preco}
             />
           </li>
         ))}
@@ -125,7 +133,17 @@ function InfoContainer({ pedido }) {
       </h2>
       <ul>
         <li>
-          {pedido.pagamento}
+          {metodoPagamento[pedido.paymentStatus].nome}
+        </li>
+      </ul>
+      <h2>
+        <img src="/images/order/pagamento.png" alt="Forma de pagamento" />
+        {' '}
+        Observação
+      </h2>
+      <ul>
+        <li>
+          {pedido.descricao}
         </li>
       </ul>
       <Informacoes style={{ maxWidth: '150px' }}>
@@ -133,7 +151,7 @@ function InfoContainer({ pedido }) {
         <br />
         <strong>
           <FormatarValorReal
-            value={pedido.valor}
+            value={pedido.valorTotal}
           />
         </strong>
       </Informacoes>
@@ -160,6 +178,7 @@ function OrderPageInfo({ pedido }) {
               margin: '16px 0',
             }}
           >
+            <ButtonLogout />
             <HeaderContainer>
               <img src="/images/pedido/icone.png" alt="Veja seu pedido" />
               <h1>Detalhes do seu pedido</h1>
@@ -172,10 +191,7 @@ function OrderPageInfo({ pedido }) {
   );
 }
 
-export default function OrderPage({ ...props }) {
-  const pedido = {
-    ...props,
-  };
+export default function OrderPage({ pedido }) {
   return (
     <>
       <GlobalStyle />
@@ -188,19 +204,10 @@ export default function OrderPage({ ...props }) {
 
 export async function getServerSideProps(context) {
   const cookies = nookies.get(context);
-  const endereco = JSON.parse(cookies.USER_PEDIDO_ENDERECO);
-  const pedido = JSON.parse(cookies.USER_PEDIDO);
-  const pagamentoNumber = JSON.parse(cookies.USER_PEDIDO_PAGAMENTO);
-  let pagamento = 'Cartão de crédito';
-
-  if (pagamentoNumber === 2) {
-    pagamento = 'PIX';
-  } else if (pagamentoNumber === 3) {
-    pagamento = 'Dinheiro';
-  }
-
   const token = JSON.parse(cookies.USER_TOKEN);
-  const listaProdutos = await fetch('https://don-delivery.herokuapp.com/produtos', {
+
+  const { oid } = context.query;
+  const pedido = await fetch(`https://don-delivery.herokuapp.com/pedidos/${oid}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token.token}`,
@@ -212,11 +219,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      endereco: endereco.endereco.endereco,
-      pagamento,
-      produtos: pedido.produtos,
-      valor: pedido.valorTotal,
-      listaProdutos,
+      pedido,
     },
   };
 }

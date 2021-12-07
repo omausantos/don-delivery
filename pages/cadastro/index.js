@@ -87,7 +87,7 @@ function Container() {
                 email: userInfo.email,
                 password: userInfo.password,
                 passwordtwo: userInfo.passwordtwo,
-                roles: [{ id: 1 }, { id: 2 }],
+                roles: [{ id: 1 }],
               };
 
               const validacoesCampos = validacoes(userDTO);

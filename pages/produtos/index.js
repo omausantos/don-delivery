@@ -9,6 +9,7 @@ import Header from '../../src/commons/Header';
 import Footer from '../../src/commons/Footer';
 import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
 import breakpointsMedia from '../../src/theme/utils/breakpointsMedia';
+import ButtonLogout from '../../src/commons/ButtonLogout';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -26,9 +27,8 @@ const HeaderContainer = styled.header`
     }
     p {margin: 0;}
     > div:first-child p {        
-        padding: 8px 16px 8px 0;
-        margin-right: 8px;
-        border-right: solid 1px #000;        
+        padding: 8px 16px;
+        margin-right: 8px;       
     }
     > div:last-child p {
         margin-left: 16px;
@@ -97,8 +97,49 @@ const Next = styled.div`
     
 `;
 
+const Alert = styled.div`
+  font-size: 1.2rem;
+  position: relative;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  margin-top: 8px;
+  text-align:center;
+  line-height: 1.6rem;
+  a {
+    color: #155724;
+    font-weight: bold;
+  }
+`;
+
+function UltimoPedido({ ultimoPedido }) {
+  if (!ultimoPedido) {
+    return (
+      <>
+      </>
+    );
+  }
+
+  return (
+    <Alert>
+      Seu ultimo pedido foi realizado em
+      {' '}
+      <strong>{ultimoPedido.instante}</strong>
+      <br />
+      {' '}
+      <Link href={`/order/${ultimoPedido.id}`} passHref>
+        <a href={`/order/${ultimoPedido.id}`}>Clique aqui para acessar</a>
+      </Link>
+    </Alert>
+  );
+}
+
 // eslint-disable-next-line react/prop-types
-export default function Produtos({ produtos }) {
+export default function Produtos({ produtos, ultimoPedido }) {
   const [quantidades, setQuantidades] = React.useState(0);
   const [pedido, setPedido] = React.useState({ produtos: {} });
 
@@ -135,8 +176,8 @@ export default function Produtos({ produtos }) {
               margin: '16px 0',
             }}
           >
+            <UltimoPedido ultimoPedido={ultimoPedido} />
             <HeaderContainer>
-              <div />
               <div style={{
                 padding: '10px',
               }}
@@ -154,6 +195,7 @@ export default function Produtos({ produtos }) {
                   </span>
                 </p>
               </div>
+              <ButtonLogout />
             </HeaderContainer>
             <ListaProdutos>
               {produtos.map((produto) => (
@@ -200,10 +242,23 @@ export async function getServerSideProps(context) {
     return response;
   });
 
+  const pedidos = await fetch('https://don-delivery.herokuapp.com/pedidos', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token.token}`,
+    },
+  }).then(async (res) => {
+    const response = await res.json();
+    return response;
+  });
+
+  const ultimoPedido = pedidos.content.filter((pedido) => pedido.user.email.includes(token.email));
+
   // Falar sobre tamanho da página aqui e tomar cuidado com recursos extras que vão pra página
   return {
     props: {
       produtos,
+      ultimoPedido: ultimoPedido[0],
     },
   };
 }

@@ -113,7 +113,12 @@ function Container() {
                         path: '/',
                         maxAge: 86400 * 7,
                       });
-                      router.push('/produtos');
+
+                      if (userInfo.email === 'contato@doncorleone.com.br') {
+                        router.push('/pedidos/1');
+                      } else {
+                        router.push('/produtos');
+                      }
                     } else {
                       setErrors({ acessonegado: 'Dados de Acesso inválidos' });
                     }
@@ -160,10 +165,6 @@ function Container() {
                 onChange={handleChange}
               />
               {errors.password && <MensagemErro>{errors.password}</MensagemErro>}
-
-              <Link href="/login" passHref>
-                <a href="/login">Esqueceu sua senha?</a>
-              </Link>
               <Button>
                 Acessar
               </Button>
@@ -193,4 +194,22 @@ export default function Login() {
 
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context);
+  const token = !!cookies.USER_TOKEN;
+
+  if (token) {
+    return {
+      redirect: {
+        destination: '/produtos',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 }

@@ -13,6 +13,7 @@ import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
 import Label from '../../src/commons/Label';
 import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
+import ButtonLogout from '../../src/commons/ButtonLogout';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -107,6 +108,15 @@ function ProdutoList({ info, infoProdutoPedido }) {
   );
 }
 
+function setMetodoPagemento(token, pedidoId, pagamentoId) {
+  fetch(`https://don-delivery.herokuapp.com/pedidos/${pedidoId}/pagamento/${pagamentoId}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
   const findProductById = (id) => {
     const item = listaProdutos.find((element) => element.id === id);
@@ -131,13 +141,14 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
     const endereco = JSON.parse(Cookies.get('USER_PEDIDO_ENDERECO'));
     const usuario = JSON.parse(Cookies.get('USER_TOKEN'));
     const { produtos } = JSON.parse(Cookies.get('USER_PEDIDO'));
-    const { observacao } = JSON.parse(Cookies.get('USER_PEDIDO_OBS'));
+    const { observacao } = Cookies.get('USER_PEDIDO_OBS') ? JSON.parse(Cookies.get('USER_PEDIDO_OBS')) : { observacao: '' };
+    const pagamentoId = JSON.parse(Cookies.get('USER_PEDIDO_PAGAMENTO'));
     const itens = [];
 
     for (const prop in produtos) {
       itens.push({
-        quantity: produtos[prop].qtd,
-        product: {
+        quantidade: produtos[prop].qtd,
+        produto: {
           id: produtos[prop].id,
         },
       });
@@ -147,12 +158,11 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
       user: {
         email: usuario.email,
       },
-      address: endereco.endereco.endereco,
       endereco: endereco.endereco.endereco,
       latitude: endereco.endereco.lat,
       longitude: endereco.endereco.lng,
       descricao: observacao,
-      productOrders: itens,
+      itens,
     };
 
     fetch('https://don-delivery.herokuapp.com/pedidos', {
@@ -165,7 +175,20 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
     })
       .then(async (respostaDoServer) => {
         const dadosDaResposta = await respostaDoServer.json();
-        router.push(`/order/${dadosDaResposta.id}`);
+        setMetodoPagemento(usuario.token, dadosDaResposta.id, pagamentoId);
+
+        fetch(`https://don-delivery.herokuapp.com/pedidos/${dadosDaResposta.id}/pagamento/${pagamentoId}`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${usuario.token}`,
+          },
+        }).then(async () => {
+          Cookies.remove('USER_PEDIDO_ENDERECO');
+          Cookies.remove('USER_PEDIDO');
+          Cookies.remove('USER_PEDIDO_OBS');
+          Cookies.remove('USER_PEDIDO_PAGAMENTO');
+          router.push(`/order/${dadosDaResposta.id}`);
+        });
       });
   };
 
@@ -175,21 +198,39 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
         <h2 style={{ textAlign: 'center' }}>Formas de pagamento</h2>
         <Grid.Row>
           <Grid.Col
-            offset={{ xs: 0, md: 4 }}
-            col={{ xs: 12, md: 4 }}
+            offset={{ xs: 0, md: 3 }}
+            col={{ xs: 12, md: 6 }}
           >
             <ListaPagamentos>
               <li>
-                <input type="radio" value="1" name="pagamento" id="pagamento-cartao" onChange={handleChange} />
+                <input type="radio" value="3" name="pagamento" id="pagamento-cartao-credito" onChange={handleChange} />
                 <img src="/images/pedido/cartao.png" alt="Pagamento por cartão de crédito" />
                 <Label
-                  for="pagamento-cartao"
+                  for="pagamento-cartao-credito"
                 >
                   Cartão de crédito
                 </Label>
               </li>
               <li>
-                <input type="radio" value="2" name="pagamento" id="pagamento-pix" onChange={handleChange} />
+                <input type="radio" value="2" name="pagamento" id="pagamento-cartao-debito" onChange={handleChange} />
+                <img src="/images/pedido/debito.png" alt="Pagamento por cartão de débito" />
+                <Label
+                  for="pagamento-cartao-debito"
+                >
+                  Cartão de débito
+                </Label>
+              </li>
+              <li>
+                <input type="radio" value="4" name="pagamento" id="pagamento-cartao-alimentacao" onChange={handleChange} />
+                <img src="/images/pedido/vale.png" alt="Pagamento por cartão de alimentação" />
+                <Label
+                  for="pagamento-cartao-alimentacao"
+                >
+                  Vale Refeição/Alimentação
+                </Label>
+              </li>
+              <li>
+                <input type="radio" value="5" name="pagamento" id="pagamento-pix" onChange={handleChange} />
                 <img src="/images/pedido/pix.png" alt="Pagamento por PIX" />
                 <Label
                   for="pagamento-pix"
@@ -198,7 +239,7 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
                 </Label>
               </li>
               <li>
-                <input type="radio" value="3" name="pagamento" id="pagamento-dinheiro" onChange={handleChange} />
+                <input type="radio" value="8" name="pagamento" id="pagamento-dinheiro" onChange={handleChange} />
                 <img src="/images/pedido/dinheiro.png" alt="Pagamento por Dinheiro" />
                 <Label
                   for="pagamento-dinheiro"
@@ -275,6 +316,7 @@ export default function Finalizar({ listaProdutos, listaProdutosPedido }) {
             }}
           >
             <form>
+              <ButtonLogout />
               <HeaderContainer>
                 <img src="/images/pedido/pagamento.png" alt="Selecione seu método de pagamento" />
                 <h1>Pagamento</h1>

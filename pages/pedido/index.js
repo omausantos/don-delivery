@@ -20,6 +20,7 @@ import TextInput from '../../src/commons/TextField';
 import breakpointsMedia from '../../src/theme/utils/breakpointsMedia';
 import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
 import SimpleMap from '../../src/commons/Maps';
+import ButtonLogout from '../../src/commons/ButtonLogout';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -386,9 +387,11 @@ export default function Pedido({ listaProdutos, listaProdutosPedido }) {
               router.push('/pedido/finalizar');
             }}
             >
+              <ButtonLogout />
               <HeaderContainer>
                 <img src="/images/pedido/icone.png" alt="Veja seu pedido" />
                 <h1>Detalhes do seu pedido</h1>
+
               </HeaderContainer>
               <Endereco />
               <Produtos listaProdutos={listaProdutos} listaProdutosPedido={listaProdutosPedido} />
