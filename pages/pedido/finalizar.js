@@ -132,7 +132,6 @@ function MetodoPagamento({ listaProdutos, listaProdutosPedido }) {
   const handleChange = (event) => {
     nookies.set(null, 'USER_PEDIDO_PAGAMENTO', event.target.value, {
       path: '/',
-      maxAge: 86400 * 7,
     });
   };
 
