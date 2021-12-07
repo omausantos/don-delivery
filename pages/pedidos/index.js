@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import styled, { createGlobalStyle, css } from 'styled-components';
+import nookies from 'nookies';
 import Footer from '../../src/commons/Footer';
 import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
@@ -101,10 +102,7 @@ const Container = styled.ul`
     }
 `;
 
-
-
 function Pedido({ info }) {
-
   const statusPedidos = {
     PENDING: {
       nome: 'PENDENTE',
@@ -290,11 +288,14 @@ export default function Pedidos({ listaPedidos }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context);
+  const token = JSON.parse(cookies.USER_TOKEN);
+
   const { content } = await fetch('https://don-delivery.herokuapp.com/pedidos', {
     method: 'GET',
     headers: {
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBUEkgZWNvbW1lcmNlIGJvb3RjYW1wIiwic3ViIjoiMSIsImlhdCI6MTYzODg0MTc4NiwiZXhwIjoxNjM4OTQxNzkzfQ.U_Va-mUlXZLUipDwOxUv_GDXbT3PX38Ouow7j3UzEd0',
+      Authorization: `Bearer ${token.token}`,
     },
   }).then(async (res) => {
     const response = await res.json();
