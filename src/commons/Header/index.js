@@ -87,9 +87,6 @@ export default function Header() {
                 <li>Desde 1970</li>
                 <li><img src="/images/instagram.png" alt="Instagram da Pizzaria Corleone" /></li>
                 <li><img src="/images/facebook.png" alt="Facebook da Pizzaria Corleone" /></li>
-                <li>
-                  <a href="/logout"><img src="/images/logout.png" alt="Sair do sistema" /></a>
-                </li>
               </ul>
             </HeaderRight>
           </Grid.Col>

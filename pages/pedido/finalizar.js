@@ -13,6 +13,7 @@ import Grid from '../../src/commons/Grid';
 import Header from '../../src/commons/Header';
 import Label from '../../src/commons/Label';
 import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
+import ButtonLogout from '../../src/commons/ButtonLogout';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -315,6 +316,7 @@ export default function Finalizar({ listaProdutos, listaProdutosPedido }) {
             }}
           >
             <form>
+              <ButtonLogout />
               <HeaderContainer>
                 <img src="/images/pedido/pagamento.png" alt="Selecione seu método de pagamento" />
                 <h1>Pagamento</h1>

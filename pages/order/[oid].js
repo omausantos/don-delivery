@@ -9,6 +9,7 @@ import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
 import breakpointsMedia from '../../src/theme/utils/breakpointsMedia';
 import metodoPagamento from '../../src/theme/metodoPagamento';
 import statusPedido from '../../src/theme/statusPedido';
+import ButtonLogout from '../../src/commons/ButtonLogout';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -177,6 +178,7 @@ function OrderPageInfo({ pedido }) {
               margin: '16px 0',
             }}
           >
+            <ButtonLogout />
             <HeaderContainer>
               <img src="/images/pedido/icone.png" alt="Veja seu pedido" />
               <h1>Detalhes do seu pedido</h1>

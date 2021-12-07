@@ -9,6 +9,7 @@ import Header from '../../src/commons/Header';
 import Footer from '../../src/commons/Footer';
 import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
 import breakpointsMedia from '../../src/theme/utils/breakpointsMedia';
+import ButtonLogout from '../../src/commons/ButtonLogout';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -26,9 +27,8 @@ const HeaderContainer = styled.header`
     }
     p {margin: 0;}
     > div:first-child p {        
-        padding: 8px 16px 8px 0;
-        margin-right: 8px;
-        border-right: solid 1px #000;        
+        padding: 8px 16px;
+        margin-right: 8px;       
     }
     > div:last-child p {
         margin-left: 16px;
@@ -178,7 +178,6 @@ export default function Produtos({ produtos, ultimoPedido }) {
           >
             <UltimoPedido ultimoPedido={ultimoPedido} />
             <HeaderContainer>
-              <div />
               <div style={{
                 padding: '10px',
               }}
@@ -196,6 +195,7 @@ export default function Produtos({ produtos, ultimoPedido }) {
                   </span>
                 </p>
               </div>
+              <ButtonLogout />
             </HeaderContainer>
             <ListaProdutos>
               {produtos.map((produto) => (

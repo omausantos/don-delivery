@@ -10,6 +10,7 @@ import breakpointsMedia from '../../src/theme/utils/breakpointsMedia';
 import FormatarValorReal from '../../src/theme/utils/formatarValorReal';
 import metodoPagamento from '../../src/theme/metodoPagamento';
 import statusPedido from '../../src/theme/statusPedido';
+import ButtonLogout from '../../src/commons/ButtonLogout';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -267,6 +268,7 @@ export default function Pedidos({ listaPedidos, paginacao }) {
               margin: '16px 0',
             }}
           >
+            <ButtonLogout />
             <HeaderContainer>
               <img src="/images/pedido/icone.png" alt="Veja seu pedido" />
               <h1>Gestão de pedidos </h1>
