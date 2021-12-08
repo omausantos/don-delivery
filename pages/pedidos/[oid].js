@@ -290,7 +290,7 @@ export async function getServerSideProps(context) {
   const token = JSON.parse(cookies.USER_TOKEN);
 
   const { oid } = context.query;
-  const retorno = await fetch(`https://don-delivery.herokuapp.com/pedidos?page=${oid - 1}&linesPerPage=6&direction=DESC&orderBy=id`, {
+  const retorno = await fetch(`https://don-delivery.herokuapp.com/pedidos/paged?page=${oid - 1}&linesPerPage=6&direction=DESC&orderBy=id`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token.token}`,
