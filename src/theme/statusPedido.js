@@ -8,7 +8,7 @@ const statusPedidos = {
     id: 2,
   },
   DELIVRED: {
-    nome: 'EMTREGUE',
+    nome: 'ENTREGUE',
     id: 3,
   },
   CANCELED: {
