@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable react/prop-types */
 import React from 'react';
 import styled, { createGlobalStyle, css } from 'styled-components';
@@ -229,7 +230,7 @@ const Paginacao = styled.ul`
 
 function ListaPaginacao({ paginacao }) {
   const myArray = [];
-  for (let i = 1; i <= paginacao; i + 1) {
+  for (let i = 1; i <= paginacao; i++) {
     myArray.push(i);
   }
   const listItems = myArray.map((number) => (
