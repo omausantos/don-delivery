@@ -85,6 +85,11 @@ function Endereco() {
     lng: -46.60014993277882,
   });
 
+  const searchOptions = {
+    componentRestrictions: { country: ['br'] },
+    types: ['address'],
+  };
+
   const handleSelect = async (value) => {
     const results = await geocodeByAddress(value);
     const latLng = await getLatLng(results[0]);
@@ -112,6 +117,7 @@ function Endereco() {
               value={address}
               onChange={setAddress}
               onSelect={handleSelect}
+              searchOptions={searchOptions}
             >
               {({
                 getInputProps, suggestions, getSuggestionItemProps, loading,
@@ -135,7 +141,6 @@ function Endereco() {
                       const style = {
                         backgroundColor: suggestion.active ? '#f7f7f7' : '#fff',
                       };
-
                       return (
                         <li {...getSuggestionItemProps(suggestion, { style })}>
                           {suggestion.description}
