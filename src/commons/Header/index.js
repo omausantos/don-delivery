@@ -85,8 +85,16 @@ export default function Header() {
             <HeaderRight>
               <ul>
                 <li>Desde 1970</li>
-                <li><img src="/images/instagram.png" alt="Instagram da Pizzaria Corleone" /></li>
-                <li><img src="/images/facebook.png" alt="Facebook da Pizzaria Corleone" /></li>
+                <li>
+                  <a href="https://www.instagram.com/" target="_blank" rel="noreferrer">
+                    <img src="/images/instagram.png" alt="Instagram da Pizzaria Corleone" />
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.facebook.com/" target="_blank" rel="noreferrer">
+                    <img src="/images/facebook.png" alt="Facebook da Pizzaria Corleone" />
+                  </a>
+                </li>
               </ul>
             </HeaderRight>
           </Grid.Col>
