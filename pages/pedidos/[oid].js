@@ -107,7 +107,7 @@ const Container = styled.ul`
     }
 `;
 
-function Pedido({ info }) {
+function Pedido({ info, token }) {
   const [selectDefault, setSelectDefault] = React.useState(statusPedido[info.status].id);
 
   function handleChange(event) {
@@ -115,7 +115,7 @@ function Pedido({ info }) {
     fetch(`https://don-delivery.herokuapp.com/pedidos/${info.id}/status/${event.target.value}`, {
       method: 'PUT',
       headers: {
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBUEkgZWNvbW1lcmNlIGJvb3RjYW1wIiwic3ViIjoiMSIsImlhdCI6MTYzODg0MTc4NiwiZXhwIjoxNjM4OTQxNzkzfQ.U_Va-mUlXZLUipDwOxUv_GDXbT3PX38Ouow7j3UzEd0',
+        Authorization: `Bearer ${token}`,
       },
     });
   }
@@ -251,7 +251,7 @@ function ListaPaginacao({ paginacao }) {
   );
 }
 
-export default function Pedidos({ listaPedidos, paginacao }) {
+export default function Pedidos({ listaPedidos, paginacao, token }) {
   return (
     <>
       <GlobalStyle />
@@ -278,7 +278,7 @@ export default function Pedidos({ listaPedidos, paginacao }) {
               <h1>Gestão de pedidos </h1>
             </HeaderContainer>
             <Container>
-              {listaPedidos.map((pedido) => <Pedido info={pedido} key={pedido.id} />)}
+              {listaPedidos.map((pedido) => <Pedido info={pedido} key={pedido.id} token={token} />)}
             </Container>
             <ListaPaginacao paginacao={paginacao} />
           </Grid.Col>
@@ -308,6 +308,7 @@ export async function getServerSideProps(context) {
     props: {
       listaPedidos: retorno.content,
       paginacao: retorno.totalPages,
+      token: token.token,
     },
   };
 }
