@@ -198,9 +198,12 @@ function Pedido({ info }) {
                 Em preparação
               </option>
               <option value="3">
-                Entregue
+                A caminho
               </option>
               <option value="4">
+                Entregue
+              </option>
+              <option value="5">
                 Cancelado
               </option>
             </select>
