@@ -3,17 +3,21 @@ const statusPedidos = {
     nome: 'PENDENTE',
     id: 1,
   },
-  EN_ROUTE: {
+  IN_PREPARATION: {
     nome: 'EM PREPARAÇÃO',
     id: 2,
   },
+  EN_ROUTE: {
+    nome: 'A CAMINHO',
+    id: 3,
+  },
   DELIVRED: {
     nome: 'ENTREGUE',
-    id: 3,
+    id: 4,
   },
   CANCELED: {
     nome: 'CANCELADO',
-    id: 4,
+    id: 5,
   },
 };
 
